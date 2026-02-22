@@ -1,0 +1,89 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { FiArrowRight } from "react-icons/fi";
+import { MENU_ITEMS, MENU_CATEGORIES } from "@/utils/constants";
+import MenuItemCard from "@/components/menu/MenuItemCard";
+
+const FEATURED_CATEGORIES = ["all", "breakfast", "coffee", "lunch", "desserts"];
+
+export default function FeaturedMenu() {
+  const [activeCategory, setActiveCategory] = useState("all");
+
+  const categories = MENU_CATEGORIES.filter((c) =>
+    FEATURED_CATEGORIES.includes(c.slug)
+  );
+
+  const popular  = MENU_ITEMS.filter((i) => i.popular && i.available);
+  const filtered =
+    activeCategory === "all"
+      ? popular.slice(0, 8)
+      : MENU_ITEMS.filter((i) => i.category === activeCategory && i.available).slice(0, 8);
+
+  return (
+    <section className="section-padding bg-[#FAFAF7]">
+      <div className="container-site">
+
+        {/* ── Header row: left title + right CTA (professional layout) ── */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+          <div>
+            <p className="text-[#D2691E] font-semibold uppercase tracking-widest text-xs mb-3">
+              What&rsquo;s on offer
+            </p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#1A0E07] leading-tight">
+              Our Favourites
+            </h2>
+            <p className="text-[#333]/45 text-sm mt-2 max-w-sm">
+              Hand-picked by our regulars — hearty breakfasts to perfectly pulled espressos.
+            </p>
+          </div>
+          <Link
+            href="/menu"
+            className="shrink-0 inline-flex items-center gap-2 px-6 py-3 border-2 border-[#6F4E37] text-[#6F4E37] font-bold rounded-2xl hover:bg-[#6F4E37] hover:text-white transition-all text-sm group"
+          >
+            View Full Menu
+            <FiArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </div>
+
+        {/* ── Category filter tabs ── */}
+        <div className="flex gap-1 overflow-x-auto scrollbar-hide mb-8 pb-1">
+          {categories.map((cat) => (
+            <button
+              key={cat.slug}
+              onClick={() => setActiveCategory(cat.slug)}
+              className={`shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                activeCategory === cat.slug
+                  ? "bg-[#1A0E07] text-white shadow-md"
+                  : "bg-white border border-gray-200 text-[#333]/60 hover:border-[#6F4E37]/40 hover:text-[#6F4E37]"
+              }`}
+            >
+              <span className="text-base leading-none">{cat.icon}</span>
+              {cat.name}
+            </button>
+          ))}
+        </div>
+
+        {/* ── Menu grid ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {filtered.map((item) => (
+            <MenuItemCard key={item._id} item={item} view="grid" />
+          ))}
+        </div>
+
+        {/* ── Mobile CTA (desktop CTA is in header row) ── */}
+        <div className="text-center mt-10 sm:hidden">
+          <Link
+            href="/menu"
+            className="inline-flex items-center gap-2 px-8 py-3.5 border-2 border-[#6F4E37] text-[#6F4E37] font-bold rounded-2xl hover:bg-[#6F4E37] hover:text-white transition-all"
+          >
+            View Full Menu
+            <FiArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+      </div>
+    </section>
+  );
+}

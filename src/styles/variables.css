@@ -1,0 +1,61 @@
+/*
+ * Beans & Beyond — CSS Custom Properties (Design Tokens)
+ * These mirror the Tailwind @theme block in globals.css.
+ * Use these in any plain CSS files where Tailwind classes aren't available.
+ */
+
+:root {
+  /* ── Brand colours ── */
+  --bb-coffee:        #6F4E37;
+  --bb-coffee-light:  #8B6347;
+  --bb-coffee-dark:   #4A3425;
+  --bb-cream:         #F5F5DC;
+  --bb-cream-dark:    #EDE8CC;
+  --bb-blue:          #2C5F8D;
+  --bb-blue-light:    #3A7ABF;
+  --bb-blue-dark:     #1E4267;
+  --bb-orange:        #D2691E;
+  --bb-orange-light:  #E07A2A;
+  --bb-orange-dark:   #B5571A;
+  --bb-charcoal:      #333333;
+  --bb-gray-light:    #F8F8F8;
+
+  /* ── Typography ── */
+  --bb-font-heading:  "Poppins", system-ui, sans-serif;
+  --bb-font-body:     "Open Sans", system-ui, sans-serif;
+
+  /* ── Spacing grid (8px base) ── */
+  --bb-space-1:  8px;
+  --bb-space-2:  16px;
+  --bb-space-3:  24px;
+  --bb-space-4:  32px;
+  --bb-space-6:  48px;
+  --bb-space-8:  64px;
+  --bb-space-10: 80px;
+  --bb-space-12: 96px;
+
+  /* ── Border radius ── */
+  --bb-radius-sm:  8px;
+  --bb-radius-md:  12px;
+  --bb-radius-lg:  16px;
+  --bb-radius-xl:  24px;
+  --bb-radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --bb-shadow-sm:   0 1px 3px rgba(0,0,0,.08);
+  --bb-shadow-md:   0 4px 16px rgba(0,0,0,.10);
+  --bb-shadow-lg:   0 8px 32px rgba(0,0,0,.12);
+  --bb-shadow-xl:   0 16px 48px rgba(0,0,0,.15);
+
+  /* ── Transitions ── */
+  --bb-transition: all 0.2s ease;
+
+  /* ── Z-index scale ── */
+  --bb-z-header:  50;
+  --bb-z-modal:   60;
+  --bb-z-toast:   70;
+  --bb-z-tooltip: 80;
+
+  /* ── Breakpoints (reference only — use Tailwind classes in JSX) ── */
+  /* sm: 640px | md: 768px | lg: 1024px | xl: 1280px | 2xl: 1536px */
+}
