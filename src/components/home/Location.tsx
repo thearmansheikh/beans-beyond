@@ -5,7 +5,7 @@ import OpeningHours from "./OpeningHours";
 
 export default function Location() {
   return (
-    <section className="pt-20 md:pt-24 pb-12 bg-[#FDFAF7]">
+    <section className="pt-20 md:pt-24 pb-12 bg-[#F8F4EF]">
       <div className="container-site">
 
         <SectionHeader eyebrow="Find Us" title="Visit Us Today" />
@@ -30,7 +30,7 @@ export default function Location() {
           <div className="space-y-6">
             <ContactInfo />
 
-            <div className="bg-[#F8F8F8] rounded-2xl p-6">
+            <div className="bg-white rounded-2xl p-6 border border-[#EEE6DC]">
               <h3 className="font-black text-[#6F4E37] text-xl mb-4">
                 Opening Hours
               </h3>

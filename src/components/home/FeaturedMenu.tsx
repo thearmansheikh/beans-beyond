@@ -4,12 +4,16 @@ import { useState } from "react";
 import Link from "next/link";
 import { FiArrowRight } from "react-icons/fi";
 import { MENU_ITEMS, MENU_CATEGORIES } from "@/utils/constants";
+import FadeIn from "@/components/ui/FadeIn";
 import MenuItemCard from "@/components/menu/MenuItemCard";
+import MenuItemModal from "@/components/menu/MenuItemModal";
+import type { MenuItem } from "@/types";
 
 const FEATURED_CATEGORIES = ["all", "breakfast", "coffee", "lunch", "desserts"];
 
 export default function FeaturedMenu() {
   const [activeCategory, setActiveCategory] = useState("all");
+  const [selectedItem, setSelectedItem]     = useState<MenuItem | null>(null);
 
   const categories = MENU_CATEGORIES.filter((c) =>
     FEATURED_CATEGORIES.includes(c.slug)
@@ -22,11 +26,12 @@ export default function FeaturedMenu() {
       : MENU_ITEMS.filter((i) => i.category === activeCategory && i.available).slice(0, 8);
 
   return (
-    <section className="section-padding bg-[#FAFAF7]">
+    <>
+    <section className="section-padding bg-[#F8F4EF]">
       <div className="container-site">
 
         {/* ── Header row: left title + right CTA (professional layout) ── */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+        <FadeIn from="bottom" className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
           <div>
             <p className="text-[#D2691E] font-semibold uppercase tracking-widest text-xs mb-3">
               What&rsquo;s on offer
@@ -45,7 +50,7 @@ export default function FeaturedMenu() {
             View Full Menu
             <FiArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
-        </div>
+        </FadeIn>
 
         {/* ── Category filter tabs ── */}
         <div className="flex gap-1 overflow-x-auto scrollbar-hide mb-8 pb-1">
@@ -66,11 +71,13 @@ export default function FeaturedMenu() {
         </div>
 
         {/* ── Menu grid ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {filtered.map((item) => (
-            <MenuItemCard key={item._id} item={item} view="grid" />
-          ))}
-        </div>
+        <FadeIn from="bottom" delay={100}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {filtered.map((item) => (
+              <MenuItemCard key={item._id} item={item} view="grid" onViewDetails={setSelectedItem} />
+            ))}
+          </div>
+        </FadeIn>
 
         {/* ── Mobile CTA (desktop CTA is in header row) ── */}
         <div className="text-center mt-10 sm:hidden">
@@ -85,5 +92,12 @@ export default function FeaturedMenu() {
 
       </div>
     </section>
+
+    <MenuItemModal
+      item={selectedItem}
+      onClose={() => setSelectedItem(null)}
+      onViewItem={setSelectedItem}
+    />
+    </>
   );
 }

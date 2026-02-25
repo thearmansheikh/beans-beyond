@@ -9,6 +9,8 @@ import {
 import Dashboard      from "@/components/admin/Dashboard";
 import OrderManagement from "@/components/admin/OrderManagement";
 import MenuManagement  from "@/components/admin/MenuManagement";
+import CustomersPanel  from "@/components/admin/CustomersPanel";
+import SettingsPanel   from "@/components/admin/SettingsPanel";
 import { RESTAURANT }  from "@/utils/constants";
 import { authApi }     from "@/services/api";
 import { authService } from "@/services/auth";
@@ -270,18 +272,8 @@ export default function AdminPage() {
           {activeTab === "dashboard"  && <Dashboard />}
           {activeTab === "orders"     && <OrderManagement />}
           {activeTab === "menu"       && <MenuManagement />}
-          {activeTab === "customers"  && (
-            <div className="text-center py-20 text-[#333]/40">
-              <FiUsers className="w-12 h-12 mx-auto mb-3 opacity-30" />
-              <p className="font-semibold">Customer management coming in Phase 2</p>
-            </div>
-          )}
-          {activeTab === "settings"   && (
-            <div className="text-center py-20 text-[#333]/40">
-              <FiSettings className="w-12 h-12 mx-auto mb-3 opacity-30" />
-              <p className="font-semibold">Settings panel coming in Phase 2</p>
-            </div>
-          )}
+          {activeTab === "customers"  && <CustomersPanel />}
+          {activeTab === "settings"   && <SettingsPanel />}
         </main>
       </div>
     </div>

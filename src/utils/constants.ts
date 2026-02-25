@@ -10,34 +10,32 @@ export const RESTAURANT = {
     "When you're stuck on something creatively, you can't solve a problem, you go to a coffee shop…",
   taglineAuthor: "Eric Weiner",
   description: "Café, Breakfast & Brunch restaurant serving Halal food on Commercial Road, London E14.",
-  address: "819 Commercial Rd, London E14 7HG",
-  // ⚠️ Phone number partially visible — update the last digits once confirmed
-  phone: "020 308XXXXX",
-  email: "hello@bbcafe.co.uk",
+  address: "819-821 Commercial Road, London E14 7HG",
+  phone: "020 3089 6961",
+  email: "info@bbcafe.co.uk",
   website: "https://www.bbcafe.co.uk",
-  rating: 3.5,
-  reviewCount: 17,
+  rating: 4.5,
+  reviewCount: 120,
   halal: true,
-  googleMapsUrl:
-    "https://www.google.com/maps/place/Beans+%26+Beyond/@51.5149,-0.0224,17z",
+  googleMapsUrl: "https://goo.gl/maps/nuEfMNKqU2c8uqq48",
   // Free static embed — no API key required
   googleMapsEmbed:
-    "https://maps.google.com/maps?q=Beans+%26+Beyond,+819+Commercial+Rd,+London+E14+7HG&t=&z=17&ie=UTF8&iwloc=&output=embed",
+    "https://maps.google.com/maps?q=819-821+Commercial+Road,+London+E14+7HG&t=&z=17&ie=UTF8&iwloc=&output=embed",
   social: {
-    instagram: "https://www.instagram.com/bbcafe",
-    facebook: "https://www.facebook.com/bbcafe",
+    instagram: "https://www.instagram.com/beans_beyond/",
+    facebook: "https://www.facebook.com/BeansBeyond",
     tiktok: "https://www.tiktok.com/@bbcafe",
   },
 } as const;
 
 export const HOURS = [
-  { day: "Monday",    open: "07:00", close: "21:00", closed: false },
-  { day: "Tuesday",   open: "07:00", close: "21:00", closed: false },
-  { day: "Wednesday", open: "07:00", close: "21:00", closed: false },
-  { day: "Thursday",  open: "07:00", close: "21:00", closed: false },
-  { day: "Friday",    open: "07:00", close: "21:00", closed: false },
-  { day: "Saturday",  open: "07:00", close: "21:00", closed: false },
-  { day: "Sunday",    open: "08:00", close: "20:00", closed: false },
+  { day: "Monday",    open: "08:00", close: "22:00", closed: false },
+  { day: "Tuesday",   open: "08:00", close: "22:00", closed: false },
+  { day: "Wednesday", open: "08:00", close: "22:00", closed: false },
+  { day: "Thursday",  open: "08:00", close: "22:00", closed: false },
+  { day: "Friday",    open: "08:00", close: "22:00", closed: false },
+  { day: "Saturday",  open: "08:00", close: "22:00", closed: false },
+  { day: "Sunday",    open: "10:00", close: "17:00", closed: false },
 ];
 
 export const MENU_CATEGORIES: MenuCategory[] = [
@@ -76,7 +74,7 @@ export const MENU_ITEMS: MenuItem[] = [
   {
     _id: "b4", name: "Avocado Toast", category: "breakfast",
     description: "Smashed avocado on sourdough with cherry tomatoes, feta & everything bagel seasoning.",
-    price: 7.99, imageUrl: "https://images.unsplash.com/photo-1484723091739-30990106e8cd?w=600&q=80",
+    price: 7.99, imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "dairy"] },
     available: true, customizationOptions: [], popular: true,
   },

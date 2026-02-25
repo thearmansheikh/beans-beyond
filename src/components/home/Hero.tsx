@@ -3,15 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FiChevronDown, FiClock, FiMapPin, FiArrowRight } from "react-icons/fi";
+import { FiChevronDown, FiClock, FiArrowRight } from "react-icons/fi";
 import { RESTAURANT } from "@/utils/constants";
 import { isRestaurantOpen, getTodayHours } from "@/utils/helpers";
 
-const DELIVERY_PARTNERS = [
-  { name: "Deliveroo", bg: "bg-[#00CCBC]/15 border-[#00CCBC]/35 text-[#00CCBC]" },
-  { name: "Uber Eats", bg: "bg-[#06C167]/15 border-[#06C167]/35 text-[#06C167]" },
-  { name: "JustEat",   bg: "bg-[#FF8000]/15 border-[#FF8000]/35 text-[#FF8000]" },
-];
+const DELIVERY_PARTNERS = ["Deliveroo", "Uber Eats", "JustEat"];
 
 const HERO_IMAGE = "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=900&q=85";
 
@@ -38,6 +34,7 @@ export default function Hero() {
           src={HERO_IMAGE}
           alt="Fresh food at Beans & Beyond"
           fill
+          sizes="(max-width: 1023px) 100vw, 0px"
           className="object-cover"
           priority
         />
@@ -51,18 +48,18 @@ export default function Hero() {
           {/* Left: copy */}
           <div className="animate-fade-in-up">
 
-            {/* Live status */}
-            {mounted && (
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-dark text-white text-sm font-medium mb-7">
-                <span className={`w-2 h-2 rounded-full shrink-0 ${open ? "bg-green-400 animate-pulse-dot" : "bg-red-400"}`} />
-                {open ? `Open now · ${getTodayHours()}` : `Closed · Opens ${getTodayHours()}`}
-              </div>
-            )}
-
-            {/* Eyebrow */}
-            <p className="text-[#D2691E]/80 font-semibold uppercase tracking-[0.22em] text-xs mb-5">
-              ☕ Halal Café &amp; Restaurant · East London
-            </p>
+            {/* Eyebrow — live status merged with branding */}
+            <div className="flex items-center gap-3 mb-6">
+              <p className="text-[#D2691E]/75 font-semibold uppercase tracking-[0.2em] text-xs">
+                Halal Café · East London
+              </p>
+              {mounted && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/6 border border-white/10 text-white/50 text-[11px] font-medium">
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${open ? "bg-green-400 animate-pulse-dot" : "bg-red-400"}`} />
+                  {open ? `Open · ${getTodayHours()}` : `Closed · ${getTodayHours()}`}
+                </span>
+              )}
+            </div>
 
             {/* Headline */}
             <h1 className="text-5xl sm:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] font-black text-white leading-[1.04] mb-6">
@@ -80,7 +77,7 @@ export default function Hero() {
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3 mb-8">
+            <div className="flex flex-col sm:flex-row gap-3 mb-10">
               <Link
                 href="/order"
                 className="inline-flex items-center justify-center gap-2.5 px-9 py-4 bg-[#D2691E] text-white font-black text-base rounded-2xl hover:bg-[#B5571A] transition-all shadow-2xl shadow-[#D2691E]/35 hover:shadow-[#D2691E]/55 hover:-translate-y-0.5 active:scale-[0.98]"
@@ -97,15 +94,15 @@ export default function Hero() {
             </div>
 
             {/* Delivery partners */}
-            <div className="mb-10">
-              <p className="text-white/25 text-[10px] uppercase tracking-[0.18em] mb-3 font-semibold">
-                Also order via
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {DELIVERY_PARTNERS.map(({ name, bg }) => (
+            <div className="flex items-center gap-3 mb-8">
+              <span className="text-white/20 text-[10px] uppercase tracking-[0.16em] font-medium shrink-0">
+                Also on
+              </span>
+              <div className="flex gap-2">
+                {DELIVERY_PARTNERS.map((name) => (
                   <span
                     key={name}
-                    className={`px-3.5 py-1.5 rounded-full border text-xs font-bold ${bg}`}
+                    className="px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-white/40 text-xs font-semibold"
                   >
                     {name}
                   </span>
@@ -114,50 +111,38 @@ export default function Hero() {
             </div>
 
             {/* Stats strip */}
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-3 pt-6 border-t border-white/8">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-yellow-500/15 flex items-center justify-center shrink-0">
-                  <span className="text-yellow-400 text-lg leading-none">★</span>
+            <div className="flex items-center gap-8 pt-7 border-t border-white/10">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-yellow-500/12 flex items-center justify-center shrink-0">
+                  <span className="text-yellow-400 text-base leading-none">★</span>
                 </div>
                 <div>
                   <p className="text-white font-bold text-sm leading-none">{RESTAURANT.rating} / 5</p>
-                  <p className="text-white/30 text-[11px] mt-0.5">{RESTAURANT.reviewCount} reviews</p>
+                  <p className="text-white/35 text-[11px] mt-1">{RESTAURANT.reviewCount} reviews</p>
                 </div>
               </div>
 
-              <div className="w-px h-8 bg-white/8 hidden sm:block" />
+              <div className="w-px h-8 bg-white/10" />
 
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-[#D2691E]/15 flex items-center justify-center shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#D2691E]/12 flex items-center justify-center shrink-0">
                   <FiClock className="w-4 h-4 text-[#D2691E]" />
                 </div>
                 <div>
                   <p className="text-white font-bold text-sm leading-none">From 7am</p>
-                  <p className="text-white/30 text-[11px] mt-0.5">7 days a week</p>
+                  <p className="text-white/35 text-[11px] mt-1">7 days a week</p>
                 </div>
               </div>
 
-              <div className="w-px h-8 bg-white/8 hidden sm:block" />
+              <div className="w-px h-8 bg-white/10" />
 
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-green-500/15 flex items-center justify-center shrink-0">
-                  <span className="text-green-400 text-base leading-none font-black">✓</span>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-green-500/12 flex items-center justify-center shrink-0">
+                  <span className="text-green-400 text-sm leading-none font-black">✓</span>
                 </div>
                 <div>
-                  <p className="text-white font-bold text-sm leading-none">Halal</p>
-                  <p className="text-white/30 text-[11px] mt-0.5">Certified kitchen</p>
-                </div>
-              </div>
-
-              <div className="w-px h-8 bg-white/8 hidden sm:block" />
-
-              <div className="hidden sm:flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-[#6F4E37]/30 flex items-center justify-center shrink-0">
-                  <FiMapPin className="w-4 h-4 text-[#D2691E]" />
-                </div>
-                <div>
-                  <p className="text-white font-bold text-sm leading-none">E14</p>
-                  <p className="text-white/30 text-[11px] mt-0.5">Commercial Road</p>
+                  <p className="text-white font-bold text-sm leading-none">100% Halal</p>
+                  <p className="text-white/35 text-[11px] mt-1">Certified kitchen</p>
                 </div>
               </div>
             </div>
@@ -172,6 +157,7 @@ export default function Hero() {
                   src={HERO_IMAGE}
                   alt="Delicious fresh food at Beans & Beyond"
                   fill
+                  sizes="430px"
                   className="object-cover"
                   priority
                 />
@@ -202,7 +188,11 @@ export default function Hero() {
             <div className="absolute bottom-48 right-0 animate-float delay-200 bg-[#D2691E] rounded-2xl px-4 py-3 shadow-2xl shadow-[#D2691E]/40 flex items-center gap-3 rotate-1 hover:rotate-0 transition-transform duration-300">
               <span className="text-white font-black text-2xl leading-none">{RESTAURANT.rating}</span>
               <div>
-                <div className="text-yellow-300 text-xs">★★★★</div>
+                <div className="text-yellow-300 text-xs">
+                  {"★".repeat(Math.floor(RESTAURANT.rating))}
+                  {RESTAURANT.rating % 1 >= 0.5 ? "½" : ""}
+                  {"☆".repeat(5 - Math.ceil(RESTAURANT.rating))}
+                </div>
                 <p className="text-white/75 text-[10px] mt-0.5">{RESTAURANT.reviewCount} reviews</p>
               </div>
             </div>

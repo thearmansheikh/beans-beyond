@@ -7,11 +7,14 @@ import { RESTAURANT, HOURS } from "@/utils/constants";
 import NewsletterForm from "./NewsletterForm";
 
 const NAV_LINKS = [
-  { href: "/",        label: "Home"         },
-  { href: "/menu",    label: "Menu"         },
-  { href: "/order",   label: "Order Online" },
-  { href: "/about",   label: "About Us"     },
-  { href: "/contact", label: "Contact"      },
+  { href: "/",         label: "Home"         },
+  { href: "/menu",     label: "Menu"         },
+  { href: "/order",    label: "Order Online" },
+  { href: "/book",     label: "Book a Table" },
+  { href: "/catering", label: "Catering"     },
+  { href: "/loyalty",  label: "Loyalty"      },
+  { href: "/about",    label: "About Us"     },
+  { href: "/contact",  label: "Contact"      },
 ];
 
 const SOCIAL = [
@@ -81,8 +84,8 @@ export default function Footer() {
             </p>
 
             {/* Halal badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-900/40 border border-green-700/40 text-green-400 text-xs font-bold mb-6">
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#D2691E]/15 border border-[#D2691E]/25 text-[#E8944A] text-xs font-bold mb-6">
+              <span className="w-2 h-2 rounded-full bg-[#E8944A] animate-pulse" />
               100% Halal Certified
             </div>
 
@@ -105,7 +108,7 @@ export default function Footer() {
 
           {/* ── Quick Links ── */}
           <div className="lg:col-span-2">
-            <h3 className="text-[11px] font-black text-white/35 uppercase tracking-[0.2em] mb-5">
+            <h3 className="text-[11px] font-black text-white/50 uppercase tracking-[0.2em] mb-5">
               Explore
             </h3>
             <ul className="space-y-3.5">
@@ -125,7 +128,7 @@ export default function Footer() {
 
           {/* ── Opening Hours ── */}
           <div className="lg:col-span-3">
-            <h3 className="text-[11px] font-black text-white/35 uppercase tracking-[0.2em] mb-5">
+            <h3 className="text-[11px] font-black text-white/50 uppercase tracking-[0.2em] mb-5">
               Opening Hours
             </h3>
             <ul className="space-y-2.5">
@@ -146,7 +149,7 @@ export default function Footer() {
 
           {/* ── Contact ── */}
           <div className="lg:col-span-3">
-            <h3 className="text-[11px] font-black text-white/35 uppercase tracking-[0.2em] mb-5">
+            <h3 className="text-[11px] font-black text-white/50 uppercase tracking-[0.2em] mb-5">
               Get in Touch
             </h3>
             <ul className="space-y-4">

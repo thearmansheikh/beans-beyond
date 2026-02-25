@@ -1,4 +1,5 @@
 import { USPS } from "@/utils/constants";
+import FadeIn from "@/components/ui/FadeIn";
 import PhotoCollage from "./PhotoCollage";
 import USPCard from "./USPCard";
 
@@ -9,7 +10,7 @@ export default function About() {
         <div className="grid lg:grid-cols-2 gap-14 items-center">
 
           {/* ── Left: photo collage + story text ── */}
-          <div>
+          <FadeIn from="left">
             <PhotoCollage />
 
             <p className="text-[#D2691E] font-semibold uppercase tracking-widest text-sm mb-3">
@@ -48,14 +49,16 @@ export default function About() {
               Learn our full story
               <span className="group-hover:translate-x-1 transition-transform">→</span>
             </a>
-          </div>
+          </FadeIn>
 
           {/* ── Right: USP grid ── */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {USPS.map(({ icon, title, desc }) => (
-              <USPCard key={title} icon={icon} title={title} desc={desc} />
-            ))}
-          </div>
+          <FadeIn from="right" delay={150}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {USPS.map(({ icon, title, desc }) => (
+                <USPCard key={title} icon={icon} title={title} desc={desc} />
+              ))}
+            </div>
+          </FadeIn>
 
         </div>
       </div>

@@ -1,32 +1,39 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import {
   FiShoppingCart, FiMenu, FiX, FiPhone, FiMapPin,
-  FiInstagram, FiFacebook, FiChevronDown,
+  FiInstagram, FiFacebook, FiChevronDown, FiTag, FiCalendar, FiArrowRight,
+  FiHome, FiGrid, FiPackage, FiInfo, FiMail,
 } from "react-icons/fi";
 import { FaTiktok } from "react-icons/fa";
 import { useCart, useCartHydrated } from "@/context/CartContext";
-import { RESTAURANT, MENU_CATEGORIES } from "@/utils/constants";
+import { RESTAURANT, MENU_CATEGORIES, MENU_ITEMS } from "@/utils/constants";
 import { isRestaurantOpen, getTodayHours } from "@/utils/helpers";
 
 const NAV_LINKS = [
-  { href: "/",        label: "Home"    },
-  { href: "/menu",    label: "Menu",   dropdown: true },
-  { href: "/order",   label: "Order"   },
-  { href: "/about",   label: "About"   },
-  { href: "/contact", label: "Contact" },
+  { href: "/",         label: "Home"     },
+  { href: "/menu",     label: "Menu",    dropdown: true },
+  { href: "/order",    label: "Order"    },
+  { href: "/catering", label: "Catering" },
+  { href: "/about",    label: "About"    },
+  { href: "/contact",  label: "Contact"  },
 ];
 
-const MENU_CATS = MENU_CATEGORIES.filter((c) => c.slug !== "all");
+const MENU_CATS   = MENU_CATEGORIES.filter((c) => c.slug !== "all");
+const CHEFS_PICK  = MENU_ITEMS.find((i) => i.chefsPick && i.available) ?? null;
+
+const PROMO_KEY = "bb-promo-v1";
 
 export default function Header() {
   const pathname  = usePathname();
-  const [scrolled,  setScrolled]  = useState(false);
-  const [menuOpen,  setMenuOpen]  = useState(false);
-  const [dropOpen,  setDropOpen]  = useState(false);
+  const [scrolled,   setScrolled]   = useState(false);
+  const [menuOpen,   setMenuOpen]   = useState(false);
+  const [dropOpen,   setDropOpen]   = useState(false);
+  const [showBanner, setShowBanner] = useState(false);
   const dropRef   = useRef<HTMLDivElement>(null);
   const hydrated  = useCartHydrated();
   const { itemCount } = useCart();
@@ -34,6 +41,24 @@ export default function Header() {
 
   const isHome      = pathname === "/";
   const transparent = isHome && !scrolled;
+
+  /* ── Promo banner: show unless previously dismissed ── */
+  useEffect(() => {
+    if (!localStorage.getItem(PROMO_KEY)) setShowBanner(true);
+  }, []);
+
+  /* ── Keep CSS variable in sync so sticky children (e.g. filter bar) can offset correctly ── */
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--header-h",
+      showBanner ? "156px" : "108px"
+    );
+  }, [showBanner]);
+
+  const dismissBanner = () => {
+    localStorage.setItem(PROMO_KEY, "1");
+    setShowBanner(false);
+  };
 
   /* ── Scroll listener ── */
   useEffect(() => {
@@ -71,6 +96,37 @@ export default function Header() {
             : "bg-white/97 backdrop-blur-lg border-b border-gray-100/80 shadow-[0_1px_24px_rgba(0,0,0,0.07)]"
         }`}
       >
+        {/* ══ Promo banner ══ */}
+        <div
+          className={`overflow-hidden transition-all duration-500 ${
+            showBanner ? "max-h-16 opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
+          <div className="relative bg-gradient-to-r from-[#D2691E] via-[#C85E18] to-[#E8944A] text-white overflow-hidden">
+            {/* subtle diagonal stripe overlay */}
+            <div
+              className="absolute inset-0 opacity-[0.07]"
+              style={{ backgroundImage: "repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%)", backgroundSize: "10px 10px" }}
+            />
+            <div className="relative container-site flex items-center justify-center gap-3 py-2.5 px-10">
+              <FiTag className="w-3.5 h-3.5 shrink-0 opacity-80" />
+              <p className="text-xs sm:text-sm font-semibold text-center leading-snug">
+                🎉 Free delivery on orders over £25 — use code{" "}
+                <strong className="font-black tracking-wide bg-white/20 px-1.5 py-0.5 rounded-md">
+                  FREEBEAN
+                </strong>
+              </p>
+            </div>
+            <button
+              onClick={dismissBanner}
+              aria-label="Dismiss promotion"
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
+            >
+              <FiX className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
         {/* ══ Top info bar — slides away on homepage ══ */}
         <div
           className={`overflow-hidden transition-all duration-500 ${
@@ -196,7 +252,7 @@ export default function Header() {
                         )}
                       </Link>
 
-                      {/* Dropdown panel */}
+                      {/* ── Mega menu dropdown ── */}
                       <div
                         className={`absolute top-full left-1/2 -translate-x-1/2 pt-3 z-50 transition-all duration-200 ${
                           dropOpen
@@ -204,30 +260,103 @@ export default function Header() {
                             : "opacity-0 -translate-y-2 pointer-events-none"
                         }`}
                       >
-                        <div className="bg-white rounded-2xl shadow-2xl shadow-black/10 border border-gray-100 p-2 w-56 overflow-hidden">
-                          <p className="px-3 pt-1 pb-2 text-[10px] font-bold text-[#333]/35 uppercase tracking-widest">
-                            Browse by category
-                          </p>
-                          {MENU_CATS.map((cat) => (
+                        <div className="bg-white rounded-2xl shadow-2xl shadow-black/12 border border-gray-100 overflow-hidden w-[430px]">
+
+                          {/* Header strip */}
+                          <div className="flex items-center justify-between px-4 py-3 bg-[#F8F4EF] border-b border-[#EEE6DC]">
+                            <p className="text-[10px] font-black text-[#6F4E37]/55 uppercase tracking-[0.2em]">
+                              Browse menu
+                            </p>
                             <Link
-                              key={cat.slug}
                               href="/menu"
                               onClick={() => setDropOpen(false)}
-                              className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#F5F5DC] text-[#2C1A0E]/70 hover:text-[#6F4E37] transition-colors"
+                              className="flex items-center gap-1 text-[#D2691E] text-xs font-bold hover:underline"
                             >
-                              <span className="text-lg leading-none">{cat.icon}</span>
-                              <span className="text-sm font-semibold">{cat.name}</span>
+                              View all
+                              <FiArrowRight className="w-3 h-3" />
                             </Link>
-                          ))}
-                          <div className="mx-3 my-1.5 border-t border-gray-100" />
-                          <Link
-                            href="/menu"
-                            onClick={() => setDropOpen(false)}
-                            className="flex items-center justify-between px-3 py-2.5 rounded-xl bg-[#6F4E37]/6 hover:bg-[#6F4E37]/12 text-[#6F4E37] font-bold text-sm transition-colors"
-                          >
-                            View full menu
-                            <span className="text-[#D2691E]">→</span>
-                          </Link>
+                          </div>
+
+                          {/* Body */}
+                          <div className="flex">
+
+                            {/* Left: category list */}
+                            <div className="flex-1 p-2">
+                              {MENU_CATS.map((cat) => {
+                                const count = MENU_ITEMS.filter(
+                                  (i) => i.category === cat.slug && i.available
+                                ).length;
+                                return (
+                                  <Link
+                                    key={cat.slug}
+                                    href={`/menu#cat-${cat.slug}`}
+                                    onClick={() => setDropOpen(false)}
+                                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#F8F4EF] text-[#2C1A0E]/65 hover:text-[#6F4E37] transition-colors group"
+                                  >
+                                    <span className="w-8 h-8 rounded-lg bg-[#F8F4EF] group-hover:bg-[#EEE6DC] flex items-center justify-center text-base shrink-0 transition-colors">
+                                      {cat.icon}
+                                    </span>
+                                    <span className="text-sm font-semibold flex-1">{cat.name}</span>
+                                    <span className="text-[10px] font-black text-[#333]/30 tabular-nums">
+                                      {count}
+                                    </span>
+                                  </Link>
+                                );
+                              })}
+                            </div>
+
+                            {/* Divider */}
+                            <div className="w-px bg-gray-100 my-3" />
+
+                            {/* Right: featured */}
+                            <div className="w-[172px] shrink-0 p-3 flex flex-col gap-3">
+
+                              {/* Chef's Pick card */}
+                              {CHEFS_PICK && (
+                                <Link
+                                  href="/menu"
+                                  onClick={() => setDropOpen(false)}
+                                  className="group block rounded-xl overflow-hidden border border-gray-100 hover:border-[#D2691E]/30 transition-colors"
+                                >
+                                  <div className="relative h-[100px] bg-gradient-to-br from-amber-900 to-amber-700">
+                                    <Image
+                                      src={CHEFS_PICK.imageUrl}
+                                      alt={CHEFS_PICK.name}
+                                      fill
+                                      sizes="172px"
+                                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent" />
+                                    <span className="absolute top-2 left-2 text-[9px] font-black bg-white text-[#1A0E07] px-2 py-0.5 rounded-full shadow-sm">
+                                      ⭐ Chef&rsquo;s Pick
+                                    </span>
+                                    <div className="absolute bottom-2 left-2 right-2">
+                                      <p className="text-white font-bold text-xs leading-tight line-clamp-1">{CHEFS_PICK.name}</p>
+                                      <p className="text-white/60 text-[10px] mt-0.5">£{CHEFS_PICK.price.toFixed(2)}</p>
+                                    </div>
+                                  </div>
+                                </Link>
+                              )}
+
+                              {/* Rating blurb */}
+                              <div className="flex-1 flex flex-col items-center justify-center p-3 rounded-xl bg-[#F8F4EF] text-center">
+                                <p className="text-yellow-500 text-sm leading-none">{"★★★★☆"}</p>
+                                <p className="text-[#6F4E37] font-black text-base mt-1">{RESTAURANT.rating} / 5</p>
+                                <p className="text-[#333]/40 text-[10px] mt-0.5">{RESTAURANT.reviewCount} Google reviews</p>
+                              </div>
+
+                              {/* Order CTA */}
+                              <Link
+                                href="/order"
+                                onClick={() => setDropOpen(false)}
+                                className="flex items-center justify-center gap-1.5 py-2.5 bg-[#D2691E] text-white text-xs font-black rounded-xl hover:bg-[#B5571A] transition-colors shadow-md shadow-[#D2691E]/25"
+                              >
+                                Order Now
+                                <FiArrowRight className="w-3 h-3" />
+                              </Link>
+                            </div>
+
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -253,16 +382,16 @@ export default function Header() {
             </nav>
 
             {/* ── Right actions ── */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
 
-              {/* Halal badge — desktop only */}
-              <span className={`hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border transition-all duration-300 ${
+              {/* Halal badge — large desktop only */}
+              <span className={`hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-black border transition-all duration-300 ${
                 transparent
-                  ? "bg-green-500/15 border-green-400/25 text-green-300"
-                  : "bg-green-50 border-green-200 text-green-700"
+                  ? "bg-white/12 border-white/25 text-white/90"
+                  : "bg-[#D2691E]/10 border-[#D2691E]/25 text-[#D2691E]"
               }`}>
-                <span className="w-1.5 h-1.5 rounded-full bg-current" />
-                Halal
+                <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
+                100% Halal
               </span>
 
               {/* Cart */}
@@ -270,8 +399,8 @@ export default function Header() {
                 href="/order"
                 className={`relative p-2.5 rounded-xl transition-all duration-200 ${
                   transparent
-                    ? "text-white hover:bg-white/12"
-                    : "text-[#6F4E37] hover:bg-[#F5F5DC]"
+                    ? "text-white/90 hover:bg-white/12"
+                    : "text-[#6F4E37] hover:bg-[#F8F4EF]"
                 }`}
                 aria-label="View cart"
               >
@@ -283,16 +412,30 @@ export default function Header() {
                 )}
               </Link>
 
+              {/* Book CTA — desktop only */}
+              <Link
+                href="/book"
+                className={`hidden lg:inline-flex items-center gap-2 px-5 py-2.5 text-sm font-black rounded-xl transition-all active:scale-[0.97] border-2 ${
+                  transparent
+                    ? "border-white/40 text-white hover:border-white hover:bg-white/10"
+                    : "border-[#6F4E37]/35 text-[#6F4E37] hover:border-[#6F4E37] hover:bg-[#6F4E37]/8"
+                }`}
+              >
+                <FiCalendar className="w-4 h-4" />
+                Book a Table
+              </Link>
+
               {/* Order CTA */}
               <Link
                 href="/order"
-                className={`hidden sm:inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold rounded-xl transition-all active:scale-[0.97] ${
+                className={`hidden sm:inline-flex items-center gap-2 px-6 py-2.5 text-sm font-black rounded-xl transition-all active:scale-[0.97] shadow-md hover:shadow-lg ${
                   transparent
-                    ? "bg-[#D2691E] text-white hover:bg-[#B5571A] shadow-lg shadow-[#D2691E]/30"
-                    : "bg-[#D2691E] text-white hover:bg-[#B5571A] shadow-md shadow-[#D2691E]/20 hover:shadow-lg"
+                    ? "bg-[#D2691E] text-white hover:bg-[#B5571A] shadow-[#D2691E]/40"
+                    : "bg-gradient-to-r from-[#D2691E] to-[#E8944A] text-white hover:opacity-90 shadow-[#D2691E]/25"
                 }`}
               >
                 Order Now
+                <FiArrowRight className="w-4 h-4" />
               </Link>
 
               {/* Hamburger */}
@@ -374,10 +517,14 @@ export default function Header() {
           <nav className="flex flex-col px-3 mt-3 gap-0.5 flex-1 overflow-y-auto" aria-label="Mobile navigation">
             {NAV_LINKS.map(({ href, label }) => {
               const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
-              const icons: Record<string, string> = {
-                "/": "🏠", "/menu": "🍽️", "/order": "🛒",
-                "/about": "☕", "/contact": "✉️",
-              };
+              const NavIcon = {
+                "/":         FiHome,
+                "/menu":     FiGrid,
+                "/order":    FiShoppingCart,
+                "/catering": FiPackage,
+                "/about":    FiInfo,
+                "/contact":  FiMail,
+              }[href] ?? FiHome;
               return (
                 <Link
                   key={href}
@@ -385,10 +532,10 @@ export default function Header() {
                   className={`flex items-center gap-3.5 px-4 py-3.5 rounded-2xl font-semibold transition-all ${
                     active
                       ? "bg-[#6F4E37]/10 text-[#D2691E]"
-                      : "text-[#2C1A0E]/75 hover:bg-[#F5F5DC] hover:text-[#6F4E37]"
+                      : "text-[#2C1A0E]/75 hover:bg-[#F8F4EF] hover:text-[#6F4E37]"
                   }`}
                 >
-                  <span className="text-xl leading-none w-6 text-center">{icons[href]}</span>
+                  <NavIcon className={`w-4.5 h-4.5 shrink-0 ${active ? "text-[#D2691E]" : "text-[#6F4E37]/55"}`} />
                   <span>{label}</span>
                   {active && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#D2691E]" />}
                 </Link>
@@ -431,10 +578,18 @@ export default function Header() {
             {/* CTAs */}
             <div className="flex gap-2">
               <Link
+                href="/book"
+                className="flex items-center justify-center gap-1.5 px-4 py-3.5 border-2 border-[#D2691E]/30 text-[#D2691E] font-bold rounded-2xl hover:bg-[#D2691E] hover:text-white hover:border-[#D2691E] transition-all text-sm"
+              >
+                <FiCalendar className="w-4 h-4" />
+                Book
+              </Link>
+              <Link
                 href="/order"
                 className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-[#D2691E] text-white font-bold rounded-2xl hover:bg-[#B5571A] transition-all text-sm shadow-md shadow-[#D2691E]/25"
               >
-                🛒 Order Now
+                <FiShoppingCart className="w-4 h-4" />
+                Order
               </Link>
               <a
                 href={`tel:${RESTAURANT.phone}`}
@@ -461,9 +616,8 @@ export default function Header() {
       </div>
 
       {/* ══ Spacer for fixed header ══ */}
-      {/* On homepage, hero fills behind transparent header so no spacer needed */}
       {/* On homepage the hero fills the full viewport behind the transparent header — no spacer needed */}
-      {!isHome && <div className="h-[108px]" />}
+      {!isHome && <div className={showBanner ? "h-[156px]" : "h-[108px]"} />}
     </>
   );
 }

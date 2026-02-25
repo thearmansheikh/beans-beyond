@@ -12,7 +12,7 @@ export default function TermsPage() {
   return (
     <CartProvider>
       <Header />
-      <main className="section-padding bg-white">
+      <main id="main-content" className="section-padding bg-white">
         <div className="container-site max-w-3xl">
           <h1 className="text-3xl sm:text-4xl font-black text-[#6F4E37] mb-3">Terms & Conditions</h1>
           <p className="text-[#333]/50 text-sm mb-10">Last updated: {new Date().getFullYear()}</p>

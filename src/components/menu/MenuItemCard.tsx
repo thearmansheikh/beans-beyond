@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 interface Props {
   item: MenuItem;
   view?: "grid" | "list";
+  onViewDetails?: (item: MenuItem) => void;
 }
 
 const CATEGORY_EMOJI: Record<string, string> = {
@@ -30,11 +31,12 @@ const CATEGORY_BG: Record<string, string> = {
   "cold-drinks": "from-sky-900 to-cyan-700",
 };
 
-export default function MenuItemCard({ item, view = "grid" }: Props) {
+export default function MenuItemCard({ item, view = "grid", onViewDetails }: Props) {
   const { addItem } = useCart();
   const isExternal  = item.imageUrl.startsWith("http");
 
-  const handleAdd = () => {
+  const handleAdd = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     addItem({
       menuItemId:     item._id,
       name:           item.name,
@@ -52,7 +54,10 @@ export default function MenuItemCard({ item, view = "grid" }: Props) {
   /* ── List view ── */
   if (view === "list") {
     return (
-      <div className="flex gap-4 bg-white border border-gray-100 rounded-2xl overflow-hidden hover:shadow-md transition-all group">
+      <div
+        className={`flex gap-4 bg-white border border-gray-100 rounded-2xl overflow-hidden hover:shadow-md transition-all group ${onViewDetails ? "cursor-pointer" : ""}`}
+        onClick={() => onViewDetails?.(item)}
+      >
         <div className={`relative w-24 shrink-0 bg-gradient-to-br ${CATEGORY_BG[item.category] ?? "from-gray-800 to-gray-600"}`}>
           {isExternal ? (
             <Image
@@ -102,7 +107,7 @@ export default function MenuItemCard({ item, view = "grid" }: Props) {
               {formatPrice(item.price)}
             </span>
             <button
-              onClick={handleAdd}
+              onClick={(e) => handleAdd(e)}
               className="flex items-center gap-1.5 px-4 py-2 bg-[#D2691E] text-white text-sm font-bold rounded-xl hover:bg-[#B5571A] transition-all active:scale-[0.96]"
               aria-label={`Add ${item.name} to cart`}
             >
@@ -117,7 +122,10 @@ export default function MenuItemCard({ item, view = "grid" }: Props) {
 
   /* ── Grid view ── */
   return (
-    <div className="group bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+    <div
+      className={`group bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col ${onViewDetails ? "cursor-pointer" : ""}`}
+      onClick={() => onViewDetails?.(item)}
+    >
       {/* Image */}
       <div className={`relative h-48 overflow-hidden bg-gradient-to-br ${CATEGORY_BG[item.category] ?? "from-gray-800 to-gray-600"}`}>
         {isExternal ? (
@@ -168,7 +176,7 @@ export default function MenuItemCard({ item, view = "grid" }: Props) {
         {/* Hover quick-add overlay */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-all duration-300 flex items-end justify-center pb-4">
           <button
-            onClick={handleAdd}
+            onClick={(e) => handleAdd(e)}
             className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#6F4E37] text-sm font-black rounded-xl shadow-xl hover:bg-[#D2691E] hover:text-white transition-all translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 duration-300"
             aria-label={`Quick add ${item.name}`}
           >
@@ -191,7 +199,7 @@ export default function MenuItemCard({ item, view = "grid" }: Props) {
             {formatPrice(item.price)}
           </span>
           <button
-            onClick={handleAdd}
+            onClick={(e) => handleAdd(e)}
             className="flex items-center gap-1.5 px-3 py-2 bg-[#D2691E] text-white text-xs font-bold rounded-xl hover:bg-[#B5571A] transition-all active:scale-[0.96]"
             aria-label={`Add ${item.name} to cart`}
           >

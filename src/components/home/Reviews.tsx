@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FiChevronLeft, FiChevronRight, FiArrowUpRight } from "react-icons/fi";
 import { REVIEWS, RESTAURANT } from "@/utils/constants";
+import FadeIn from "@/components/ui/FadeIn";
 import StarRating from "./StarRating";
 import ReviewCard from "./ReviewCard";
 
@@ -13,11 +14,22 @@ function getRatingCounts() {
   return counts;
 }
 
+const AUTO_INTERVAL = 3500;
+
 export default function Reviews() {
   const [current, setCurrent] = useState(0);
+  const [paused, setPaused]   = useState(false);
+  const timerRef              = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const prev = () => setCurrent((c) => (c - 1 + REVIEWS.length) % REVIEWS.length);
   const next = () => setCurrent((c) => (c + 1) % REVIEWS.length);
+
+  // Auto-advance every 3.5 s, pause on hover
+  useEffect(() => {
+    if (paused) return;
+    timerRef.current = setInterval(next, AUTO_INTERVAL);
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [paused, current]);
 
   const visible = [-1, 0, 1].map(
     (offset) => REVIEWS[(current + offset + REVIEWS.length) % REVIEWS.length]
@@ -30,7 +42,7 @@ export default function Reviews() {
       <div className="container-site">
 
         {/* ══ Header row ══ */}
-        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8 mb-12">
+        <FadeIn from="bottom" className="flex flex-col lg:flex-row lg:items-start justify-between gap-8 mb-12">
 
           {/* Left: title */}
           <div>
@@ -83,10 +95,14 @@ export default function Reviews() {
               })}
             </div>
           </div>
-        </div>
+        </FadeIn>
 
         {/* ══ Carousel ══ */}
-        <div className="relative">
+        <div
+          className="relative"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
           {/* Desktop: 3 cards */}
           <div className="hidden md:grid grid-cols-3 gap-5">
             {visible.map((review, idx) => (

@@ -9,7 +9,6 @@ export default function NewsletterForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: connect to Mailchimp / backend
     setSuccess(true);
     setEmail("");
   };

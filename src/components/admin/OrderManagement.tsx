@@ -44,7 +44,6 @@ export default function OrderManagement() {
 
   const updateStatus = (id: string, newStatus: string) => {
     // TODO: call ordersApi.updateStatus(id, newStatus, token)
-    console.log("Update order", id, "to", newStatus);
     alert(`[Demo] Would update order ${id} to "${newStatus}". Connect backend to enable.`);
   };
 
