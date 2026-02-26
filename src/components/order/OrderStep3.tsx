@@ -6,6 +6,7 @@ import { SiPaypal, SiApplepay, SiGooglepay } from "react-icons/si";
 import { useCart } from "@/context/CartContext";
 import Cart from "@/components/order/Cart";
 import { formatPrice, generateOrderNumber } from "@/utils/helpers";
+import { supabase } from "@/lib/supabase";
 import type { CheckoutFormData } from "@/types";
 
 const inputCls = "w-full px-4 py-3 border border-gray-200 rounded-xl text-sm text-[#1A0E07] placeholder-[#333]/30 focus:outline-none focus:ring-2 focus:ring-[#D2691E]/40 focus:border-[#D2691E] transition-all";
@@ -18,7 +19,7 @@ export default function OrderStep3({
   onBack: () => void;
   onComplete: (orderNumber: string) => void;
 }) {
-  const { orderType, total, clearCart } = useCart();
+  const { orderType, items, subtotal, deliveryFee, serviceCharge, total, clearCart } = useCart();
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState<Partial<CheckoutFormData>>({
     name: "", phone: "", email: "",
@@ -30,10 +31,55 @@ export default function OrderStep3({
   const set = (field: string, value: string) =>
     setForm((f) => ({ ...f, [field]: value }));
 
+  const [orderError, setOrderError] = useState<string | null>(null);
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 1800));
+    setOrderError(null);
+
+    const deliveryAddress = orderType === "delivery"
+      ? `${form.deliveryAddress?.street}, ${form.deliveryAddress?.city} ${form.deliveryAddress?.postcode}`
+      : undefined;
+
+    // 1. Insert order
+    const { data: orderData, error: orderErr } = await supabase
+      .from("orders")
+      .insert({
+        order_type:       orderType,
+        customer_name:    form.name ?? "",
+        customer_email:   form.email ?? undefined,
+        customer_phone:   form.phone ?? undefined,
+        delivery_address: deliveryAddress,
+        table_number:     form.tableNumber ?? undefined,
+        subtotal:         subtotal(),
+        delivery_fee:     deliveryFee(),
+        service_charge:   serviceCharge(),
+        total:            total(),
+        notes:            form.specialInstructions ?? undefined,
+      })
+      .select("id")
+      .single();
+
+    if (orderErr || !orderData) {
+      setOrderError("Failed to place order. Please try again.");
+      setSubmitting(false);
+      return;
+    }
+
+    // 2. Insert order items
+    const orderItems = items.map((item) => ({
+      order_id:      orderData.id,
+      menu_item_id:  item.menuItemId,
+      name:          item.name,
+      price:         item.price,
+      quantity:      item.quantity,
+      customizations: item.customizations ?? {},
+      subtotal:      item.price * item.quantity,
+    }));
+
+    await supabase.from("order_items").insert(orderItems);
+
     const orderNum = generateOrderNumber();
     clearCart();
     onComplete(orderNum);
@@ -193,6 +239,10 @@ export default function OrderStep3({
             Payment is processed securely. We never store card details.
           </p>
         </div>
+
+        {orderError && (
+          <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">{orderError}</p>
+        )}
 
         {/* Actions */}
         <div className="flex gap-3">

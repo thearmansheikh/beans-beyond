@@ -2,13 +2,18 @@
 
 import { useState } from "react";
 import { FiMail, FiArrowRight, FiCheck } from "react-icons/fi";
+import { supabase } from "@/lib/supabase";
 
 export default function NewsletterForm() {
   const [email, setEmail]     = useState("");
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    await supabase.from("newsletter_subscribers").upsert({ email }, { onConflict: "email" });
+    setLoading(false);
     setSuccess(true);
     setEmail("");
   };
@@ -42,10 +47,10 @@ export default function NewsletterForm() {
       </div>
       <button
         type="submit"
-        className="flex items-center justify-center gap-2 px-7 py-4 bg-[#D2691E] text-white font-black rounded-xl hover:bg-[#B5571A] transition-all text-sm shrink-0 shadow-lg shadow-[#D2691E]/30 hover:scale-105"
+        disabled={loading}
+        className="flex items-center justify-center gap-2 px-7 py-4 bg-[#D2691E] text-white font-black rounded-xl hover:bg-[#B5571A] transition-all text-sm shrink-0 shadow-lg shadow-[#D2691E]/30 hover:scale-105 disabled:opacity-70"
       >
-        Subscribe
-        <FiArrowRight className="w-4 h-4" />
+        {loading ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <><span>Subscribe</span><FiArrowRight className="w-4 h-4" /></>}
       </button>
     </form>
   );

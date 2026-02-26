@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { FiCalendar, FiClock, FiUsers, FiCheck, FiArrowRight } from "react-icons/fi";
+import { supabase } from "@/lib/supabase";
 
 type FormData = {
   name:     string;
@@ -53,8 +54,27 @@ export default function BookingForm() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const handleSubmit = (e: FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState<string | null>(null);
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+    const { error: dbError } = await supabase.from("bookings").insert({
+      name:       form.name,
+      email:      form.email,
+      phone:      form.phone,
+      date:       form.date,
+      time:       form.time,
+      party_size: parseInt(form.guests),
+      notes:      form.notes || undefined,
+    });
+    setLoading(false);
+    if (dbError) {
+      setError("Something went wrong. Please try again or call us directly.");
+      return;
+    }
     setSubmitted(true);
   };
 
@@ -204,12 +224,20 @@ export default function BookingForm() {
           </div>
 
           {/* Submit */}
+          {error && (
+            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">{error}</p>
+          )}
+
           <button
             type="submit"
-            className="w-full py-4 bg-gradient-to-r from-[#D2691E] to-[#E8944A] text-white font-black rounded-2xl hover:opacity-90 transition-all shadow-lg shadow-[#D2691E]/25 text-base flex items-center justify-center gap-2"
+            disabled={loading}
+            className="w-full py-4 bg-gradient-to-r from-[#D2691E] to-[#E8944A] text-white font-black rounded-2xl hover:opacity-90 transition-all shadow-lg shadow-[#D2691E]/25 text-base flex items-center justify-center gap-2 disabled:opacity-70"
           >
-            Request Table
-            <FiArrowRight className="w-5 h-5" />
+            {loading ? (
+              <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Sending…</>
+            ) : (
+              <>Request Table<FiArrowRight className="w-5 h-5" /></>
+            )}
           </button>
 
           <p className="text-center text-xs text-[#333]/40">

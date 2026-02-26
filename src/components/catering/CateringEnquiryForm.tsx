@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { FiArrowRight, FiCheck, FiUsers, FiCalendar } from "react-icons/fi";
+import { supabase } from "@/lib/supabase";
 import { RESTAURANT } from "@/utils/constants";
 
 type FormData = {
@@ -32,8 +33,28 @@ export default function CateringEnquiryForm() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const handleSubmit = (e: FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState<string | null>(null);
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+    const { error: dbError } = await supabase.from("catering_enquiries").insert({
+      name:        form.name,
+      email:       form.email,
+      phone:       form.phone || undefined,
+      event_type:  form.eventType || undefined,
+      guest_count: form.guests ? parseInt(form.guests.split(" ")[0]) : undefined,
+      event_date:  form.date || undefined,
+      budget:      form.budget || undefined,
+      message:     form.message || undefined,
+    });
+    setLoading(false);
+    if (dbError) {
+      setError("Something went wrong. Please try again or call us directly.");
+      return;
+    }
     setSubmitted(true);
   };
 
@@ -175,13 +196,21 @@ export default function CateringEnquiryForm() {
                 />
               </div>
 
+              {error && (
+                <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">{error}</p>
+              )}
+
               {/* Submit */}
               <button
                 type="submit"
-                className="w-full py-4 bg-gradient-to-r from-[#D2691E] to-[#E8944A] text-white font-black rounded-2xl hover:opacity-90 transition-all shadow-lg shadow-[#D2691E]/25 text-base flex items-center justify-center gap-2"
+                disabled={loading}
+                className="w-full py-4 bg-gradient-to-r from-[#D2691E] to-[#E8944A] text-white font-black rounded-2xl hover:opacity-90 transition-all shadow-lg shadow-[#D2691E]/25 text-base flex items-center justify-center gap-2 disabled:opacity-70"
               >
-                Send Enquiry
-                <FiArrowRight className="w-5 h-5" />
+                {loading ? (
+                  <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Sending…</>
+                ) : (
+                  <>Send Enquiry<FiArrowRight className="w-5 h-5" /></>
+                )}
               </button>
 
               <p className="text-center text-xs text-[#333]/40">
