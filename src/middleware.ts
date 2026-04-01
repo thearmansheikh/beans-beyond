@@ -25,13 +25,16 @@ export async function middleware(request: NextRequest) {
     }
   );
 
+  // Refresh session so cookies stay valid
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Protect /admin — redirect unauthenticated users to the admin page
-  // (which shows the login form). The page itself handles the UI switch.
-  if (request.nextUrl.pathname.startsWith("/admin") && !user) {
-    // Allow the /admin page itself to render (it shows login form)
-    // Only block sub-routes if you add them later (e.g. /admin/api/*)
+  const { pathname } = request.nextUrl;
+
+  // Block access to /admin/* sub-routes (API, settings, etc.) for unauthenticated users.
+  // The /admin page itself is allowed through — it renders the login form client-side.
+  const isAdminSubRoute = pathname.startsWith("/admin/");
+  if (isAdminSubRoute && !user) {
+    return NextResponse.redirect(new URL("/admin", request.url));
   }
 
   return response;

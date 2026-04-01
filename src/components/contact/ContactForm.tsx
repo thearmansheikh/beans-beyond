@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { FiSend, FiCheck, FiAlertCircle } from "react-icons/fi";
-import { supabase } from "@/lib/supabase";
 import { RESTAURANT } from "@/utils/constants";
 
 const SUBJECTS = [
@@ -29,14 +28,21 @@ export default function ContactForm() {
     setSending(true);
     setError(null);
     try {
-      const { error: dbError } = await supabase.from("contact_messages").insert({
-        name:    form.name,
-        email:   form.email,
-        phone:   form.phone || undefined,
-        subject: form.subject,
-        message: form.message,
+      const res = await fetch("/api/contact", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name:    form.name,
+          email:   form.email,
+          phone:   form.phone || null,
+          subject: form.subject,
+          message: form.message,
+        }),
       });
-      if (dbError) throw new Error(dbError.message);
+      if (!res.ok) {
+        const { error } = await res.json().catch(() => ({ error: null }));
+        throw new Error(error ?? "Something went wrong. Please try again.");
+      }
       setSent(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");

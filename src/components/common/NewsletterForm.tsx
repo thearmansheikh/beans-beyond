@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { FiMail, FiArrowRight, FiCheck } from "react-icons/fi";
-import { supabase } from "@/lib/supabase";
 
 export default function NewsletterForm() {
   const [email, setEmail]     = useState("");
@@ -12,7 +11,11 @@ export default function NewsletterForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    await supabase.from("newsletter_subscribers").upsert({ email }, { onConflict: "email" });
+    await fetch("/api/newsletter", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
     setLoading(false);
     setSuccess(true);
     setEmail("");

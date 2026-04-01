@@ -6,7 +6,6 @@ import { SiPaypal, SiApplepay, SiGooglepay } from "react-icons/si";
 import { useCart } from "@/context/CartContext";
 import Cart from "@/components/order/Cart";
 import { formatPrice, generateOrderNumber } from "@/utils/helpers";
-import { supabase } from "@/lib/supabase";
 import type { CheckoutFormData } from "@/types";
 
 const inputCls = "w-full px-4 py-3 border border-gray-200 rounded-xl text-sm text-[#1A0E07] placeholder-[#333]/30 focus:outline-none focus:ring-2 focus:ring-[#D2691E]/40 focus:border-[#D2691E] transition-all";
@@ -42,43 +41,40 @@ export default function OrderStep3({
       ? `${form.deliveryAddress?.street}, ${form.deliveryAddress?.city} ${form.deliveryAddress?.postcode}`
       : undefined;
 
-    // 1. Insert order
-    const { data: orderData, error: orderErr } = await supabase
-      .from("orders")
-      .insert({
-        order_type:       orderType,
-        customer_name:    form.name ?? "",
-        customer_email:   form.email ?? undefined,
-        customer_phone:   form.phone ?? undefined,
-        delivery_address: deliveryAddress,
-        table_number:     form.tableNumber ?? undefined,
-        subtotal:         subtotal(),
-        delivery_fee:     deliveryFee(),
-        service_charge:   serviceCharge(),
-        total:            total(),
-        notes:            form.specialInstructions ?? undefined,
-      })
-      .select("id")
-      .single();
+    // POST to API route (server-side validation + admin client)
+    const res = await fetch("/api/orders", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        order: {
+          order_type:       orderType,
+          customer_name:    form.name ?? "",
+          customer_email:   form.email,
+          customer_phone:   form.phone,
+          delivery_address: deliveryAddress,
+          table_number:     form.tableNumber,
+          subtotal:         subtotal(),
+          delivery_fee:     deliveryFee(),
+          service_charge:   serviceCharge(),
+          total:            total(),
+          notes:            form.specialInstructions,
+        },
+        items: items.map((item) => ({
+          menuItemId:     item.menuItemId,
+          name:           item.name,
+          price:          item.price,
+          quantity:       item.quantity,
+          customizations: item.customizations ?? {},
+        })),
+      }),
+    });
 
-    if (orderErr || !orderData) {
-      setOrderError("Failed to place order. Please try again.");
+    if (!res.ok) {
+      const { error } = await res.json().catch(() => ({ error: "Failed to place order." }));
+      setOrderError(error ?? "Failed to place order. Please try again.");
       setSubmitting(false);
       return;
     }
-
-    // 2. Insert order items
-    const orderItems = items.map((item) => ({
-      order_id:      orderData.id,
-      menu_item_id:  item.menuItemId,
-      name:          item.name,
-      price:         item.price,
-      quantity:      item.quantity,
-      customizations: item.customizations ?? {},
-      subtotal:      item.price * item.quantity,
-    }));
-
-    await supabase.from("order_items").insert(orderItems);
 
     const orderNum = generateOrderNumber();
     clearCart();

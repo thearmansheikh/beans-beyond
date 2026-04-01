@@ -3,7 +3,6 @@
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { FiArrowRight, FiCheck, FiUsers, FiCalendar } from "react-icons/fi";
-import { supabase } from "@/lib/supabase";
 import { RESTAURANT } from "@/utils/constants";
 
 type FormData = {
@@ -40,19 +39,24 @@ export default function CateringEnquiryForm() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    const { error: dbError } = await supabase.from("catering_enquiries").insert({
-      name:        form.name,
-      email:       form.email,
-      phone:       form.phone || undefined,
-      event_type:  form.eventType || undefined,
-      guest_count: form.guests ? parseInt(form.guests.split(" ")[0]) : undefined,
-      event_date:  form.date || undefined,
-      budget:      form.budget || undefined,
-      message:     form.message || undefined,
+    const res = await fetch("/api/catering", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name:        form.name,
+        email:       form.email,
+        phone:       form.phone || null,
+        event_type:  form.eventType,
+        guest_count: form.guests || null,
+        event_date:  form.date || null,
+        budget:      form.budget || null,
+        message:     form.message || null,
+      }),
     });
     setLoading(false);
-    if (dbError) {
-      setError("Something went wrong. Please try again or call us directly.");
+    if (!res.ok) {
+      const { error } = await res.json().catch(() => ({ error: null }));
+      setError(error ?? "Something went wrong. Please try again or call us directly.");
       return;
     }
     setSubmitted(true);

@@ -3,7 +3,6 @@
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { FiCalendar, FiClock, FiUsers, FiCheck, FiArrowRight } from "react-icons/fi";
-import { supabase } from "@/lib/supabase";
 
 type FormData = {
   name:     string;
@@ -61,18 +60,23 @@ export default function BookingForm() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    const { error: dbError } = await supabase.from("bookings").insert({
-      name:       form.name,
-      email:      form.email,
-      phone:      form.phone,
-      date:       form.date,
-      time:       form.time,
-      party_size: parseInt(form.guests),
-      notes:      form.notes || undefined,
+    const res = await fetch("/api/bookings", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name:       form.name,
+        email:      form.email,
+        phone:      form.phone,
+        date:       form.date,
+        time:       form.time,
+        party_size: parseInt(form.guests),
+        notes:      form.notes || null,
+      }),
     });
     setLoading(false);
-    if (dbError) {
-      setError("Something went wrong. Please try again or call us directly.");
+    if (!res.ok) {
+      const { error } = await res.json().catch(() => ({ error: null }));
+      setError(error ?? "Something went wrong. Please try again or call us directly.");
       return;
     }
     setSubmitted(true);
