@@ -26,9 +26,9 @@ function getTodaySpecials(): MenuItem[] {
 }
 
 const TODAY_SPECIALS = getTodaySpecials();
-const DAY_NAMES      = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-const TODAY_NAME     = DAY_NAMES[new Date().getDay()];
 const DISCOUNTS      = [20, 15, 10];
+
+const DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
 /* ── Countdown logic ── */
 interface Countdown { h: number; m: number; s: number }
@@ -46,11 +46,16 @@ function getCountdown(): Countdown {
 }
 
 function useCountdown() {
-  const [cd, setCd] = useState<Countdown>(getCountdown);
+  // Start with stable zeros so server and client render identically.
+  // Populate the real time only after mount to avoid hydration mismatch.
+  const [cd, setCd] = useState<Countdown>({ h: 0, m: 0, s: 0 });
+
   useEffect(() => {
+    setCd(getCountdown());
     const id = setInterval(() => setCd(getCountdown()), 1_000);
     return () => clearInterval(id);
   }, []);
+
   return cd;
 }
 
@@ -170,6 +175,12 @@ function SpecialCard({ item, discount, index }: { item: MenuItem; discount: numb
 
 export default function DailySpecials() {
   const { h, m, s } = useCountdown();
+  const [dayName, setDayName] = useState("");
+
+  // Set the day name client-side only to avoid SSR timezone mismatch
+  useEffect(() => {
+    setDayName(DAY_NAMES[new Date().getDay()] ?? "Today");
+  }, []);
 
   if (TODAY_SPECIALS.length === 0) return null;
 
@@ -194,7 +205,7 @@ export default function DailySpecials() {
               Limited Time
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight">
-              {TODAY_NAME}&rsquo;s Specials
+              {dayName ? `${dayName}\u2019s Specials` : "Today\u2019s Specials"}
             </h2>
             <p className="text-white/40 text-sm mt-2 max-w-sm">
               Fresh discounts, every day. Available today only while stocks last.
