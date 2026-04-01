@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { FiSearch, FiRefreshCw, FiCalendar, FiUsers, FiClock, FiCheck, FiX } from "react-icons/fi";
+import { FiSearch, FiRefreshCw, FiCalendar, FiUsers, FiClock, FiCheck, FiX, FiDownload } from "react-icons/fi";
 import { createBrowserSupabaseClient, type DbBooking, type BookingStatus } from "@/lib/supabase";
 
 const STATUS_COLOURS: Record<BookingStatus, string> = {
@@ -23,6 +23,30 @@ function formatDate(dateStr: string): string {
   try {
     return new Date(dateStr).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
   } catch { return dateStr; }
+}
+
+function exportBookingsCSV(bookings: DbBooking[]) {
+  const header = ["ID", "Name", "Email", "Phone", "Date", "Time", "Party Size", "Status", "Notes", "Created"];
+  const rows = bookings.map((b) => [
+    b.id ?? "",
+    b.name,
+    b.email,
+    b.phone,
+    b.date,
+    b.time,
+    String(b.party_size),
+    b.status ?? "pending",
+    (b.notes ?? "").replace(/,/g, ";"),
+    b.created_at ? new Date(b.created_at).toLocaleString("en-GB") : "",
+  ]);
+  const csv = [header, ...rows].map((r) => r.map((v) => `"${v}"`).join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href     = url;
+  a.download = `bookings-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 export default function BookingsPanel({ onStatusChange }: { onStatusChange?: () => void }) {
@@ -188,6 +212,12 @@ export default function BookingsPanel({ onStatusChange }: { onStatusChange?: () 
         <button onClick={loadBookings}
           className="flex items-center gap-2 px-4 py-2.5 border border-[#EEE6DC] rounded-xl text-sm text-[#333]/60 hover:text-[#6F4E37] hover:border-[#6F4E37]/40 transition-all">
           <FiRefreshCw className="w-3.5 h-3.5" />Refresh
+        </button>
+        <button
+          onClick={() => exportBookingsCSV(filtered)}
+          disabled={filtered.length === 0}
+          className="flex items-center gap-2 px-4 py-2.5 border border-[#EEE6DC] rounded-xl text-sm text-[#333]/60 hover:text-[#6F4E37] hover:border-[#6F4E37]/40 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+          <FiDownload className="w-3.5 h-3.5" />Export CSV
         </button>
       </div>
 
