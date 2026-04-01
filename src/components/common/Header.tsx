@@ -108,11 +108,11 @@ export default function Header() {
               className="absolute inset-0 opacity-[0.07]"
               style={{ backgroundImage: "repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%)", backgroundSize: "10px 10px" }}
             />
-            <div className="relative container-site flex items-center justify-center gap-3 py-2.5 px-10">
-              <FiTag className="w-3.5 h-3.5 shrink-0 opacity-80" />
-              <p className="text-xs sm:text-sm font-semibold text-center leading-snug">
-                🎉 Free delivery on orders over £25 — use code{" "}
-                <strong className="font-black tracking-wide bg-white/20 px-1.5 py-0.5 rounded-md">
+            <div className="relative container-site flex items-center justify-center gap-2 py-2.5 px-8">
+              <FiTag className="w-3 h-3 shrink-0 opacity-80 hidden xs:block" />
+              <p className="text-[11px] sm:text-xs font-semibold text-center leading-snug">
+                <span className="hidden xs:inline">🎉 </span>Free delivery over £25 — use code{" "}
+                <strong className="font-black tracking-wide bg-white/20 px-1.5 py-0.5 rounded-md whitespace-nowrap">
                   FREEBEAN
                 </strong>
               </p>

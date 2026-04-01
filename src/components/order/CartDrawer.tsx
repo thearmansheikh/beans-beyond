@@ -337,7 +337,7 @@ export default function CartDrawer({ open, onClose }: Props) {
 
         {/* ── Footer (totals + CTA) ── */}
         {items.length > 0 && (
-          <div className="shrink-0 border-t border-[#EEE6DC] px-6 pt-4 pb-6 bg-white">
+          <div className="shrink-0 border-t border-[#EEE6DC] px-6 pt-4 pb-safe bg-white">
             {/* Totals */}
             <div className="space-y-2 mb-5 text-sm">
               <div className="flex justify-between text-[#333]/60">

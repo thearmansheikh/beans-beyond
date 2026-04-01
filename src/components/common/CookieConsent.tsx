@@ -76,7 +76,7 @@ export default function CookieConsent() {
           </div>
 
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-2 mt-4 pl-14">
+          <div className="flex flex-col xs:flex-row gap-2 mt-4 sm:pl-14">
             <button
               onClick={accept}
               className="flex-1 sm:flex-none px-6 py-2.5 bg-[#D2691E] text-white text-sm font-bold rounded-xl hover:bg-[#B5571A] transition-all shadow-md shadow-[#D2691E]/25 active:scale-[0.97]"

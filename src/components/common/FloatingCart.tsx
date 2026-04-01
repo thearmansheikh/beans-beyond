@@ -21,7 +21,7 @@ export default function FloatingCart() {
       <button
         onClick={() => setOpen(true)}
         aria-label={`Open cart (${count} items)`}
-        className={`fixed bottom-6 right-6 z-30 flex items-center gap-2.5 pl-4 pr-5 py-3.5 bg-gradient-to-r from-[#D2691E] to-[#E8944A] text-white font-black rounded-2xl shadow-xl shadow-[#D2691E]/35 hover:opacity-90 hover:scale-105 active:scale-95 transition-all duration-200 ${
+        className={`fixed bottom-safe right-4 sm:right-6 z-30 flex items-center gap-2 sm:gap-2.5 pl-3.5 sm:pl-4 pr-4 sm:pr-5 py-3 sm:py-3.5 bg-gradient-to-r from-[#D2691E] to-[#E8944A] text-white font-black rounded-2xl shadow-xl shadow-[#D2691E]/35 hover:opacity-90 hover:scale-105 active:scale-95 transition-all duration-200 ${
           count > 0 ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0 pointer-events-none"
         }`}
       >

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { FiShoppingCart, FiStar } from "react-icons/fi";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/utils/helpers";
@@ -55,10 +56,16 @@ export default function MenuItemCard({ item, view = "grid", onViewDetails }: Pro
   if (view === "list") {
     return (
       <div
-        className={`flex gap-4 bg-white border border-gray-100 rounded-2xl overflow-hidden hover:shadow-md transition-all group ${onViewDetails ? "cursor-pointer" : ""}`}
+        className={`flex gap-4 bg-white border border-gray-100 rounded-2xl overflow-hidden hover:shadow-md transition-all group ${
+          onViewDetails ? "cursor-pointer" : ""
+        }`}
         onClick={() => onViewDetails?.(item)}
       >
-        <div className={`relative w-24 shrink-0 bg-gradient-to-br ${CATEGORY_BG[item.category] ?? "from-gray-800 to-gray-600"}`}>
+        <div
+          className={`relative w-24 shrink-0 bg-gradient-to-br ${
+            CATEGORY_BG[item.category] ?? "from-gray-800 to-gray-600"
+          }`}
+        >
           {isExternal ? (
             <Image
               src={item.imageUrl}
@@ -108,7 +115,7 @@ export default function MenuItemCard({ item, view = "grid", onViewDetails }: Pro
             </span>
             <button
               onClick={(e) => handleAdd(e)}
-              className="flex items-center gap-1.5 px-4 py-2 bg-[#D2691E] text-white text-sm font-bold rounded-xl hover:bg-[#B5571A] transition-all active:scale-[0.96]"
+              className="btn-shine flex items-center gap-1.5 px-4 py-2 bg-[#D2691E] text-white text-sm font-bold rounded-xl hover:bg-[#B5571A] transition-all active:scale-[0.96]"
               aria-label={`Add ${item.name} to cart`}
             >
               <FiShoppingCart className="w-4 h-4" />
@@ -122,18 +129,26 @@ export default function MenuItemCard({ item, view = "grid", onViewDetails }: Pro
 
   /* ── Grid view ── */
   return (
-    <div
-      className={`group bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col ${onViewDetails ? "cursor-pointer" : ""}`}
+    <motion.div
+      className={`group bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm flex flex-col h-full ${
+        onViewDetails ? "cursor-pointer" : ""
+      }`}
       onClick={() => onViewDetails?.(item)}
+      whileHover={{ y: -5, boxShadow: "0 20px 40px rgba(0,0,0,0.13)" }}
+      transition={{ duration: 0.25, ease: [0.34, 1.56, 0.64, 1] }}
     >
       {/* Image */}
-      <div className={`relative h-48 overflow-hidden bg-gradient-to-br ${CATEGORY_BG[item.category] ?? "from-gray-800 to-gray-600"}`}>
+      <div
+        className={`relative h-48 overflow-hidden bg-gradient-to-br ${
+          CATEGORY_BG[item.category] ?? "from-gray-800 to-gray-600"
+        }`}
+      >
         {isExternal ? (
           <Image
             src={item.imageUrl}
             alt={item.name}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-cover group-hover:scale-107 transition-transform duration-600 ease-out"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
         ) : (
@@ -142,17 +157,17 @@ export default function MenuItemCard({ item, view = "grid", onViewDetails }: Pro
           </div>
         )}
 
-        {/* Bottom gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
 
-        {/* Chef's Pick badge — highest priority */}
+        {/* Chef's Pick badge */}
         {item.chefsPick && (
           <span className="absolute top-3 left-3 flex items-center gap-1 px-2.5 py-1 bg-white text-[#1A0E07] text-[10px] font-black rounded-full shadow-lg">
             ⭐ Chef&rsquo;s Pick
           </span>
         )}
 
-        {/* Popular badge — only when not Chef's Pick */}
+        {/* Popular badge */}
         {item.popular && !item.chefsPick && (
           <span className="absolute top-3 left-3 flex items-center gap-1 px-2.5 py-1 bg-[#D2691E] text-white text-[10px] font-bold rounded-full shadow-md">
             <FiStar className="w-3 h-3" />
@@ -160,24 +175,39 @@ export default function MenuItemCard({ item, view = "grid", onViewDetails }: Pro
           </span>
         )}
 
-        {/* Dietary */}
+        {/* Dietary badges */}
         <div className="absolute top-3 right-3 flex gap-1">
           {item.dietaryInfo.vegetarian && (
-            <span className="w-5 h-5 rounded-full bg-green-500 text-white text-[9px] font-bold flex items-center justify-center shadow" title="Vegetarian">V</span>
+            <span
+              className="w-5 h-5 rounded-full bg-green-500 text-white text-[9px] font-bold flex items-center justify-center shadow"
+              title="Vegetarian"
+            >
+              V
+            </span>
           )}
           {item.dietaryInfo.vegan && (
-            <span className="w-5 h-5 rounded-full bg-emerald-600 text-white text-[9px] font-bold flex items-center justify-center shadow" title="Vegan">VG</span>
+            <span
+              className="w-5 h-5 rounded-full bg-emerald-600 text-white text-[9px] font-bold flex items-center justify-center shadow"
+              title="Vegan"
+            >
+              VG
+            </span>
           )}
           {item.dietaryInfo.glutenFree && (
-            <span className="w-5 h-5 rounded-full bg-amber-500 text-white text-[9px] font-bold flex items-center justify-center shadow" title="Gluten Free">GF</span>
+            <span
+              className="w-5 h-5 rounded-full bg-amber-500 text-white text-[9px] font-bold flex items-center justify-center shadow"
+              title="Gluten Free"
+            >
+              GF
+            </span>
           )}
         </div>
 
-        {/* Hover quick-add overlay */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-all duration-300 flex items-end justify-center pb-4">
+        {/* Hover quick-add overlay (desktop pointer) — hidden on touch devices */}
+        <div className="hidden sm:flex absolute inset-0 bg-black/0 group-hover:bg-black/22 transition-all duration-300 items-end justify-center pb-4 pointer-events-none group-hover:pointer-events-auto">
           <button
             onClick={(e) => handleAdd(e)}
-            className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#6F4E37] text-sm font-black rounded-xl shadow-xl hover:bg-[#D2691E] hover:text-white transition-all translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 duration-300"
+            className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#6F4E37] text-sm font-black rounded-xl shadow-xl hover:bg-[#D2691E] hover:text-white transition-colors translate-y-3 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 duration-300"
             aria-label={`Quick add ${item.name}`}
           >
             <FiShoppingCart className="w-4 h-4" />
@@ -200,14 +230,14 @@ export default function MenuItemCard({ item, view = "grid", onViewDetails }: Pro
           </span>
           <button
             onClick={(e) => handleAdd(e)}
-            className="flex items-center gap-1.5 px-3 py-2 bg-[#D2691E] text-white text-xs font-bold rounded-xl hover:bg-[#B5571A] transition-all active:scale-[0.96]"
+            className="btn-shine flex items-center gap-1.5 px-4 py-2.5 sm:px-3.5 sm:py-2 bg-[#D2691E] text-white text-sm sm:text-xs font-bold rounded-xl hover:bg-[#B5571A] transition-all active:scale-[0.96] min-h-[40px]"
             aria-label={`Add ${item.name} to cart`}
           >
-            <FiShoppingCart className="w-3.5 h-3.5" />
+            <FiShoppingCart className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
             Add
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

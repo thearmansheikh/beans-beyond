@@ -183,3 +183,205 @@ h1, h2, h3, h4, h5, h6 {
   background-size: 200% 100%;
   animation: shimmer 2.5s linear infinite;
 }
+
+/* ─── Infinite marquee ─── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee var(--marquee-duration, 32s) linear infinite;
+  will-change: transform;
+}
+.marquee-wrap:hover .animate-marquee { animation-play-state: paused; }
+
+/* ─── Glow pulse ─── */
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1);    }
+  50%       { opacity: 1;    transform: scale(1.12); }
+}
+.animate-glow { animation: glow-pulse 4s ease-in-out infinite; }
+
+/* ─── Button beam / shine ─── */
+@keyframes btn-beam {
+  0%   { transform: skewX(-20deg) translateX(-120%); }
+  100% { transform: skewX(-20deg) translateX(300%);  }
+}
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+  transform: skewX(-20deg) translateX(-120%);
+  pointer-events: none;
+}
+.btn-shine:hover::before {
+  animation: btn-beam 0.55s ease-out forwards;
+}
+
+/* ─── Animated gradient background ─── */
+@keyframes gradient-x {
+  0%, 100% { background-position: 0%   50%; }
+  50%       { background-position: 100% 50%; }
+}
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 4s ease infinite;
+}
+
+/* ─── Animated gradient text ─── */
+.text-gradient-warm-animated {
+  background: linear-gradient(135deg, #D2691E 0%, #E8944A 50%, #D2691E 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-x 4s ease infinite;
+}
+
+/* ─── Ring pulse (live status dot) ─── */
+@keyframes ring-pulse {
+  0%   { box-shadow: 0 0 0 0   rgba(74, 222, 128, 0.55); }
+  70%  { box-shadow: 0 0 0 6px rgba(74, 222, 128, 0);    }
+  100% { box-shadow: 0 0 0 0   rgba(74, 222, 128, 0);    }
+}
+.animate-ring { animation: ring-pulse 1.8s ease-out infinite; }
+
+/* ─── Flip digit entrance (countdown) ─── */
+@keyframes flip-in {
+  from { transform: rotateX(-90deg); opacity: 0; }
+  to   { transform: rotateX(0deg);   opacity: 1; }
+}
+.flip-in { animation: flip-in 0.22s ease forwards; }
+
+/* ─── Background patterns ─── */
+.bg-grid-dark {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.bg-dots-dark {
+  background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1.5px, transparent 1.5px);
+  background-size: 30px 30px;
+}
+.bg-grid-light {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ─── Glass utilities ─── */
+.glass-light {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.5);
+}
+.glass-dark {
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* ─── Card lift hover ─── */
+.card-lift {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease;
+}
+.card-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.14);
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-glow,
+  .animate-ring,
+  .animate-float,
+  .animate-bounce,
+  .animate-fade-in-up,
+  .animate-shimmer {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* ══════════════════════════════════════════
+   MOBILE / TOUCH OPTIMISATIONS
+   ══════════════════════════════════════════ */
+
+/* ─── iOS safe-area insets ─── */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.pb-safe {
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+}
+.bottom-safe {
+  bottom: max(1.5rem, env(safe-area-inset-bottom));
+}
+
+/* ─── Momentum / bounce scrolling for overflow containers ─── */
+.scroll-touch {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+/* ─── Prevent 300 ms tap delay on all interactive elements ─── */
+a, button, [role="button"], input, select, textarea, label {
+  touch-action: manipulation;
+}
+
+/* ─── Minimum 44 × 44 px tap target helper ─── */
+.tap-target {
+  min-width:  44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Prevent text resize on orientation change (iOS) ─── */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* ─── Prevent horizontal overflow from any child ─── */
+body {
+  overflow-x: hidden;
+}
+
+/* ─── Smooth native scroll containers on iOS ─── */
+.overflow-x-auto,
+.overflow-y-auto,
+.overflow-y-scroll,
+.overflow-x-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ─── Better focus rings on mobile ─── */
+@media (pointer: coarse) {
+  :focus-visible {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 3px;
+  }
+}
+
+/* ─── Hover states should be suppressed on pure-touch devices ─── */
+@media (hover: none) {
+  .card-lift:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
