@@ -11,7 +11,11 @@ import { isRestaurantOpen, getTodayHours } from "@/utils/helpers";
 const HERO_IMAGE =
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1000&q=85";
 
-const DELIVERY_PARTNERS = ["Deliveroo", "Uber Eats", "Just Eat"];
+const DELIVERY_PARTNERS = [
+  { name: "Deliveroo", url: process.env.NEXT_PUBLIC_DELIVEROO_URL },
+  { name: "Uber Eats", url: process.env.NEXT_PUBLIC_UBEREATS_URL  },
+  { name: "Just Eat",  url: process.env.NEXT_PUBLIC_JUSTEAT_URL   },
+];
 
 /* ── Animation variants ── */
 const stagger = {
@@ -173,14 +177,26 @@ export default function Hero() {
                 Also on
               </span>
               <div className="flex gap-2 flex-wrap">
-                {DELIVERY_PARTNERS.map((name) => (
-                  <span
-                    key={name}
-                    className="px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-white/40 text-xs font-semibold hover:bg-white/10 hover:text-white/60 transition-all"
-                  >
-                    {name}
-                  </span>
-                ))}
+                {DELIVERY_PARTNERS.map(({ name, url }) =>
+                  url ? (
+                    <a
+                      key={name}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-white/40 text-xs font-semibold hover:bg-white/10 hover:text-white/60 transition-all"
+                    >
+                      {name}
+                    </a>
+                  ) : (
+                    <span
+                      key={name}
+                      className="px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-white/40 text-xs font-semibold"
+                    >
+                      {name}
+                    </span>
+                  )
+                )}
               </div>
             </motion.div>
 

@@ -6,12 +6,23 @@ import { FiCheck } from "react-icons/fi";
 import { RESTAURANT } from "@/utils/constants";
 
 export default function LoyaltyCTA() {
-  const [email, setEmail] = useState("");
-  const [joined, setJoined] = useState(false);
+  const [email,   setEmail]   = useState("");
+  const [joined,  setJoined]  = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleJoin = (e: FormEvent) => {
+  const handleJoin = async (e: FormEvent) => {
     e.preventDefault();
-    setJoined(true);
+    setLoading(true);
+    try {
+      await fetch("/api/newsletter", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ email }),
+      });
+    } finally {
+      setLoading(false);
+      setJoined(true);
+    }
   };
 
   return (
@@ -46,9 +57,10 @@ export default function LoyaltyCTA() {
             />
             <button
               type="submit"
-              className="shrink-0 px-8 py-4 bg-gradient-to-r from-[#D2691E] to-[#E8944A] text-white font-black rounded-2xl hover:opacity-90 transition-all shadow-xl shadow-[#D2691E]/30 whitespace-nowrap"
+              disabled={loading}
+              className="shrink-0 px-8 py-4 bg-gradient-to-r from-[#D2691E] to-[#E8944A] text-white font-black rounded-2xl hover:opacity-90 transition-all shadow-xl shadow-[#D2691E]/30 whitespace-nowrap disabled:opacity-60"
             >
-              Join waitlist
+              {loading ? "…" : "Join waitlist"}
             </button>
           </form>
         )}

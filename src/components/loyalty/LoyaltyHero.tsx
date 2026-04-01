@@ -13,12 +13,23 @@ const QUICK_STATS = [
 const FLOAT_POSITIONS = ["top-12 left-[8%]", "top-24 right-[12%]", "bottom-10 left-[20%]", "bottom-20 right-[8%]"];
 
 export default function LoyaltyHero() {
-  const [email, setEmail] = useState("");
-  const [joined, setJoined] = useState(false);
+  const [email,   setEmail]   = useState("");
+  const [joined,  setJoined]  = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleJoin = (e: FormEvent) => {
+  const handleJoin = async (e: FormEvent) => {
     e.preventDefault();
-    setJoined(true);
+    setLoading(true);
+    try {
+      await fetch("/api/newsletter", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ email }),
+      });
+    } finally {
+      setLoading(false);
+      setJoined(true);
+    }
   };
 
   return (
@@ -81,10 +92,11 @@ export default function LoyaltyHero() {
             />
             <button
               type="submit"
-              className="shrink-0 px-8 py-4 bg-gradient-to-r from-[#D2691E] to-[#E8944A] text-white font-black rounded-2xl hover:opacity-90 transition-all shadow-xl shadow-[#D2691E]/30 whitespace-nowrap flex items-center gap-2"
+              disabled={loading}
+              className="shrink-0 px-8 py-4 bg-gradient-to-r from-[#D2691E] to-[#E8944A] text-white font-black rounded-2xl hover:opacity-90 transition-all shadow-xl shadow-[#D2691E]/30 whitespace-nowrap flex items-center gap-2 disabled:opacity-60"
             >
-              Notify me
-              <FiArrowRight className="w-4 h-4" />
+              {loading ? "…" : "Notify me"}
+              {!loading && <FiArrowRight className="w-4 h-4" />}
             </button>
           </form>
         )}

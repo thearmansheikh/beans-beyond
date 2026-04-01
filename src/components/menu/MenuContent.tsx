@@ -20,7 +20,9 @@ const CATEGORY_COVERS: Record<string, string> = {
   desserts:      "https://images.unsplash.com/photo-1564355808539-22fda35bed7e?w=400&q=70",
 };
 
-export default function MenuContent() {
+export default function MenuContent({ initialItems }: { initialItems?: MenuItem[] }) {
+  const items = initialItems ?? MENU_ITEMS;
+
   const [activeCategory, setActiveCategory] = useState("all");
   const [search, setSearch]                 = useState("");
   const [filter, setFilter]                 = useState<Filter>({ vegetarian: false, vegan: false, glutenFree: false });
@@ -31,7 +33,7 @@ export default function MenuContent() {
     setFilter((f) => ({ ...f, [key]: !f[key] }));
 
   const filtered = useMemo(() => {
-    return MENU_ITEMS.filter((item) => {
+    return items.filter((item) => {
       if (activeCategory !== "all" && item.category !== activeCategory) return false;
       if (search && !item.name.toLowerCase().includes(search.toLowerCase()) &&
           !item.description.toLowerCase().includes(search.toLowerCase())) return false;
@@ -40,7 +42,7 @@ export default function MenuContent() {
       if (filter.glutenFree && !item.dietaryInfo.glutenFree) return false;
       return item.available;
     });
-  }, [activeCategory, search, filter]);
+  }, [items, activeCategory, search, filter]);
 
   const activeFiltersCount = Object.values(filter).filter(Boolean).length;
   const nonAllCategories   = MENU_CATEGORIES.filter((c) => c.slug !== "all");
@@ -81,8 +83,8 @@ export default function MenuContent() {
               {MENU_CATEGORIES.map((cat) => {
                 const count =
                   cat.slug === "all"
-                    ? MENU_ITEMS.filter((i) => i.available).length
-                    : MENU_ITEMS.filter((i) => i.category === cat.slug && i.available).length;
+                    ? items.filter((i) => i.available).length
+                    : items.filter((i) => i.category === cat.slug && i.available).length;
                 return (
                   <button
                     key={cat.slug}
@@ -182,8 +184,8 @@ export default function MenuContent() {
           {filtered.length > 0 && view === "collection" && !isFiltering && (
             <div className="space-y-16">
               {nonAllCategories.map((cat) => {
-                const items = MENU_ITEMS.filter((i) => i.category === cat.slug && i.available);
-                if (items.length === 0) return null;
+                const catItems = items.filter((i) => i.category === cat.slug && i.available);
+                if (catItems.length === 0) return null;
                 return (
                   <div key={cat.slug} id={`cat-${cat.slug}`}>
                     {/* Section header */}
@@ -202,7 +204,7 @@ export default function MenuContent() {
                             {cat.icon} {cat.name}
                           </h2>
                           <span className="px-2.5 py-0.5 bg-[#6F4E37]/10 text-[#6F4E37] text-xs font-bold rounded-full">
-                            {items.length} item{items.length !== 1 ? "s" : ""}
+                            {catItems.length} item{catItems.length !== 1 ? "s" : ""}
                           </span>
                         </div>
                         <div className="mt-2 h-0.5 w-12 bg-gradient-to-r from-[#D2691E] to-[#E8944A] rounded-full" />
@@ -216,16 +218,16 @@ export default function MenuContent() {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                      {items.slice(0, 4).map((item) => (
+                      {catItems.slice(0, 4).map((item) => (
                         <MenuItemCard key={item._id} item={item} view="grid" onViewDetails={setSelectedItem} />
                       ))}
-                      {items.length > 4 && (
+                      {catItems.length > 4 && (
                         <button
                           onClick={() => { setActiveCategory(cat.slug); setView("grid"); }}
                           className="flex flex-col items-center justify-center h-full min-h-[280px] border-2 border-dashed border-[#D2691E]/20 rounded-2xl text-[#D2691E] hover:border-[#D2691E]/50 hover:bg-[#D2691E]/5 transition-all group"
                         >
                           <span className="text-3xl mb-2 group-hover:scale-110 transition-transform">{cat.icon}</span>
-                          <span className="font-bold text-sm">+{items.length - 4} more</span>
+                          <span className="font-bold text-sm">+{catItems.length - 4} more</span>
                           <span className="text-[#333]/40 text-xs mt-0.5">View all {cat.name}</span>
                         </button>
                       )}

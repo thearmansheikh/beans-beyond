@@ -8,13 +8,6 @@ import { useCart, useCartHydrated } from "@/context/CartContext";
 import { formatPrice } from "@/utils/helpers";
 import { DELIVERY_FEE, FREE_DELIVERY_THRESHOLD } from "@/utils/constants";
 
-/* ── Valid promo codes ── */
-type PromoResult = { amount: number; label: string };
-const PROMOS: Record<string, (sub: number) => PromoResult> = {
-  FREEBEAN:  ()    => ({ amount: DELIVERY_FEE, label: "Free delivery" }),
-  WELCOME10: (sub) => ({ amount: parseFloat((sub * 0.10).toFixed(2)), label: "10% off subtotal" }),
-  BB20:      (sub) => ({ amount: parseFloat((sub * 0.20).toFixed(2)), label: "20% off subtotal" }),
-};
 
 export default function Cart() {
   const hydrated = useCartHydrated();
@@ -23,13 +16,9 @@ export default function Cart() {
     updateQty, removeItem, applyPromo, promoCode, discount,
   } = useCart();
 
-  const [promoInput, setPromoInput] = useState(promoCode ?? "");
-  const [promoState, setPromoState] = useState<"idle" | "ok" | "err">(promoCode ? "ok" : "idle");
-  const [promoLabel, setPromoLabel] = useState(() => {
-    if (!promoCode) return "";
-    const fn = PROMOS[promoCode];
-    return fn ? fn(subtotal()).label : "";
-  });
+  const [promoInput,   setPromoInput]   = useState(promoCode ?? "");
+  const [promoState,   setPromoState]   = useState<"idle" | "ok" | "err" | "loading">(promoCode ? "ok" : "idle");
+  const [promoLabel,   setPromoLabel]   = useState(promoCode ? "" : "");
 
   if (!hydrated) return null;
 
@@ -38,18 +27,29 @@ export default function Cart() {
   const del = deliveryFee();
   const tot = total();
 
-  const handleApplyPromo = () => {
+  const handleApplyPromo = async () => {
     const code = promoInput.trim().toUpperCase();
-    const fn   = PROMOS[code];
-    if (!fn) {
+    if (!code) return;
+    setPromoState("loading");
+    try {
+      const res  = await fetch("/api/promo/validate", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ code, subtotal: sub }),
+      });
+      const data = await res.json();
+      if (data.valid) {
+        applyPromo(data.code, data.amount);
+        setPromoState("ok");
+        setPromoLabel(data.label);
+      } else {
+        setPromoState("err");
+        applyPromo("", 0);
+      }
+    } catch {
       setPromoState("err");
       applyPromo("", 0);
-      return;
     }
-    const result = fn(sub);
-    applyPromo(code, result.amount);
-    setPromoState("ok");
-    setPromoLabel(result.label);
   };
 
   const handleRemovePromo = () => {
@@ -180,21 +180,22 @@ export default function Cart() {
                 placeholder="Promo code"
                 value={promoInput}
                 onChange={(e) => { setPromoInput(e.target.value); setPromoState("idle"); }}
-                onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleApplyPromo(); } }}
                 className="w-full pl-9 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#D2691E]/40 focus:border-[#D2691E] transition-all"
               />
             </div>
             <button
               onClick={handleApplyPromo}
-              className="px-4 py-2.5 bg-[#1A0E07] text-white text-sm font-bold rounded-xl hover:bg-[#2C1A0E] transition-colors shrink-0"
+              disabled={promoState === "loading"}
+              className="px-4 py-2.5 bg-[#1A0E07] text-white text-sm font-bold rounded-xl hover:bg-[#2C1A0E] transition-colors shrink-0 disabled:opacity-50"
             >
-              Apply
+              {promoState === "loading" ? "…" : "Apply"}
             </button>
           </div>
         )}
         {promoState === "err" && (
           <p className="mt-1.5 text-xs text-red-600 px-1">
-            Invalid code. Try <span className="font-bold">FREEBEAN</span>, <span className="font-bold">WELCOME10</span> or <span className="font-bold">BB20</span>.
+            Invalid or expired promo code.
           </p>
         )}
       </div>
