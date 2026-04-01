@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase-server";
+import { sendEmail } from "@/lib/emails/resend";
+import { bookingConfirmationHtml, bookingConfirmationSubject } from "@/lib/emails/bookingConfirmation";
+import { adminAlertHtml, adminAlertSubject } from "@/lib/emails/adminAlert";
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,7 +19,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "party_size must be a number" }, { status: 400 });
     }
 
-    // Reject past dates
     const bookingDate = new Date(date);
     const today       = new Date(); today.setHours(0, 0, 0, 0);
     if (bookingDate < today) {
@@ -43,6 +45,40 @@ export async function POST(req: NextRequest) {
       console.error("[API /bookings] insert error:", error);
       return NextResponse.json({ error: "Failed to create booking" }, { status: 500 });
     }
+
+    const adminUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/admin`;
+
+    // ── Emails (fire-and-forget) ───────────────────────────────────────────
+    await Promise.all([
+      // Customer confirmation
+      sendEmail({
+        to:      email.trim().toLowerCase(),
+        subject: bookingConfirmationSubject(),
+        html:    bookingConfirmationHtml({
+          bookingId:  data.id,
+          name:       name.trim(),
+          email:      email.trim().toLowerCase(),
+          date:       date.trim(),
+          time:       time.trim(),
+          partySize:  Number(party_size),
+          notes:      notes?.trim() || undefined,
+        }),
+      }),
+      // Admin alert
+      sendEmail({
+        to:      process.env.ADMIN_EMAIL ?? "admin@bbcafe.co.uk",
+        subject: adminAlertSubject("booking", `${name} · ${date} ${time}`),
+        html:    adminAlertHtml("booking", [
+          { label: "Name",       value: name.trim() },
+          { label: "Email",      value: email.trim() },
+          { label: "Phone",      value: phone.trim() },
+          { label: "Date",       value: date.trim() },
+          { label: "Time",       value: time.trim() },
+          { label: "Party size", value: `${party_size} guests` },
+          ...(notes ? [{ label: "Requests", value: notes.trim() }] : []),
+        ], adminUrl),
+      }),
+    ]);
 
     return NextResponse.json({ bookingId: data.id }, { status: 201 });
 
