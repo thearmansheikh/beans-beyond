@@ -1,9 +1,16 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
+import { createBrowserClient } from "@supabase/ssr";
 
 const supabaseUrl  = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-export const supabase = createClient(supabaseUrl, supabaseAnon);
+// ── Client-side singleton (for forms, data fetching in client components) ──
+export const supabase = createSupabaseClient(supabaseUrl, supabaseAnon);
+
+// ── Browser client (for auth — persists session in cookies) ──
+export function createBrowserSupabaseClient() {
+  return createBrowserClient(supabaseUrl, supabaseAnon);
+}
 
 // ─── Database Types ────────────────────────────────────────────────────────
 
@@ -85,4 +92,22 @@ export interface DbCateringEnquiry {
   budget?: string;
   message?: string;
   status?: string;
+}
+
+export interface DbMenuItem {
+  id?: string;
+  created_at?: string;
+  name: string;
+  category: string;
+  description?: string;
+  price: number;
+  image_url?: string;
+  available: boolean;
+  popular?: boolean;
+  chefs_pick?: boolean;
+  vegetarian?: boolean;
+  vegan?: boolean;
+  gluten_free?: boolean;
+  allergens?: string[];
+  display_order?: number;
 }

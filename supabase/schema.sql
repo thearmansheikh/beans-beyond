@@ -87,16 +87,39 @@ create table if not exists catering_enquiries (
   status      text default 'new'
 );
 
+-- ── Menu Items (admin-managed; public can read available items) ───
+create table if not exists menu_items (
+  id            uuid default gen_random_uuid() primary key,
+  created_at    timestamptz default now(),
+  name          text not null,
+  category      text not null,
+  description   text,
+  price         numeric(10,2) not null,
+  image_url     text,
+  available     boolean not null default true,
+  popular       boolean default false,
+  chefs_pick    boolean default false,
+  vegetarian    boolean default false,
+  vegan         boolean default false,
+  gluten_free   boolean default false,
+  allergens     text[] default '{}',
+  display_order integer default 0
+);
+
 -- ══════════════════════════════════════════════════════════════════
 -- Row Level Security (RLS) — allow public inserts, restrict reads
 -- ══════════════════════════════════════════════════════════════════
 
+alter table menu_items             enable row level security;
 alter table orders                 enable row level security;
 alter table order_items            enable row level security;
 alter table bookings               enable row level security;
 alter table newsletter_subscribers enable row level security;
 alter table contact_messages       enable row level security;
 alter table catering_enquiries     enable row level security;
+
+-- Anyone can read available menu items (public menu page)
+create policy "public read menu_items"     on menu_items             for select using (available = true);
 
 -- Anyone can INSERT (customers placing orders, bookings, signups)
 create policy "public insert orders"       on orders                 for insert with check (true);
@@ -113,5 +136,11 @@ create policy "admin select bookings"      on bookings               for select 
 create policy "admin select newsletter"    on newsletter_subscribers for select using (auth.role() = 'authenticated');
 create policy "admin select contact"       on contact_messages       for select using (auth.role() = 'authenticated');
 create policy "admin select catering"      on catering_enquiries     for select using (auth.role() = 'authenticated');
+create policy "admin select menu_items"    on menu_items             for select using (auth.role() = 'authenticated');
+create policy "admin insert menu_items"    on menu_items             for insert with check (auth.role() = 'authenticated');
+create policy "admin update menu_items"    on menu_items             for update using (auth.role() = 'authenticated');
+create policy "admin delete menu_items"    on menu_items             for delete using (auth.role() = 'authenticated');
 create policy "admin update orders"        on orders                 for update using (auth.role() = 'authenticated');
 create policy "admin update bookings"      on bookings               for update using (auth.role() = 'authenticated');
+create policy "admin update contact"       on contact_messages       for update using (auth.role() = 'authenticated');
+create policy "admin update catering"      on catering_enquiries     for update using (auth.role() = 'authenticated');

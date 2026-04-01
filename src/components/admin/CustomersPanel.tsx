@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { FiSearch, FiMail, FiPhone, FiChevronDown, FiChevronUp, FiShoppingBag } from "react-icons/fi";
 
 type Customer = {
@@ -157,9 +157,8 @@ export default function CustomersPanel() {
             </thead>
             <tbody className="divide-y divide-gray-50">
               {filtered.map((c) => (
-                <>
+                <React.Fragment key={c.id}>
                   <tr
-                    key={c.id}
                     className="hover:bg-[#F8F4EF]/40 transition-colors cursor-pointer"
                     onClick={() => toggle(c.id)}
                   >
@@ -207,7 +206,7 @@ export default function CustomersPanel() {
 
                   {/* Expandable order history */}
                   {expanded === c.id && (
-                    <tr key={`${c.id}-expanded`}>
+                    <tr>
                       <td colSpan={7} className="px-4 pb-4 bg-[#FDFCFB]">
                         <div className="mt-2 space-y-2">
                           <p className="text-[11px] font-bold text-[#333]/40 uppercase tracking-widest mb-3 flex items-center gap-1.5">
@@ -226,7 +225,7 @@ export default function CustomersPanel() {
                       </td>
                     </tr>
                   )}
-                </>
+                </React.Fragment>
               ))}
 
               {filtered.length === 0 && (
