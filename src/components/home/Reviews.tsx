@@ -170,7 +170,7 @@ export default function Reviews() {
           </div>
 
           {/* Mobile: single card with AnimatePresence slide */}
-          <div className="md:hidden overflow-hidden">
+          <div className="md:hidden overflow-hidden" aria-live="polite" aria-atomic="true">
             <AnimatePresence mode="wait" custom={dir} initial={false}>
               <motion.div
                 key={current}

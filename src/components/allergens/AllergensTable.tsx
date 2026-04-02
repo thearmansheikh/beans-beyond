@@ -50,6 +50,10 @@ export default function AllergensTable() {
                 <span className="text-sm text-[#333]/40">{items.length} item{items.length !== 1 ? "s" : ""}</span>
               </div>
 
+              {/* Mobile scroll hint */}
+              <p className="sm:hidden text-xs text-[#333]/40 mb-2 flex items-center gap-1.5">
+                <span>←</span> Swipe to see all allergens <span>→</span>
+              </p>
               <div className="overflow-x-auto rounded-2xl border border-[#EEE6DC] shadow-sm bg-white">
                 <table className="w-full text-sm min-w-[820px]">
                   <thead>

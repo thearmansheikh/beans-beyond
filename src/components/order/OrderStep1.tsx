@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { FiCheck, FiMapPin, FiClock, FiShoppingBag, FiArrowRight } from "react-icons/fi";
 import { useCart } from "@/context/CartContext";
 import type { OrderType } from "@/types";
@@ -33,6 +34,13 @@ const ORDER_TYPES = [
 
 export default function OrderStep1({ onNext }: { onNext: () => void }) {
   const { orderType, setOrderType } = useCart();
+  const [selected, setSelected] = useState<OrderType | null>(orderType ?? null);
+
+  const handleContinue = () => {
+    if (!selected) return;
+    setOrderType(selected);
+    onNext();
+  };
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -45,13 +53,13 @@ export default function OrderStep1({ onNext }: { onNext: () => void }) {
 
       <div className="grid sm:grid-cols-3 gap-5">
         {ORDER_TYPES.map(({ type, label, tagline, Icon, photo, badge }) => {
-          const selected = orderType === type;
+          const isSelected = selected === type;
           return (
             <button
               key={type}
-              onClick={() => { setOrderType(type); onNext(); }}
+              onClick={() => setSelected(type)}
               className={`group relative rounded-2xl overflow-hidden text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
-                selected ? "ring-3 ring-[#D2691E] shadow-xl" : "shadow-md"
+                isSelected ? "ring-3 ring-[#D2691E] shadow-xl" : "shadow-md"
               }`}
             >
               <div
@@ -64,7 +72,7 @@ export default function OrderStep1({ onNext }: { onNext: () => void }) {
                 {badge}
               </span>
 
-              {selected && (
+              {isSelected && (
                 <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-[#D2691E] flex items-center justify-center shadow-lg">
                   <FiCheck className="w-4 h-4 text-white" />
                 </div>
@@ -76,13 +84,24 @@ export default function OrderStep1({ onNext }: { onNext: () => void }) {
                   <h3 className="font-black text-white text-lg">{label}</h3>
                 </div>
                 <p className="text-white/65 text-xs">{tagline}</p>
-                <div className="mt-3 flex items-center gap-1 text-[#D2691E] text-xs font-bold group-hover:gap-2 transition-all">
-                  Select <FiArrowRight className="w-3 h-3" />
+                <div className={`mt-3 flex items-center gap-1 text-xs font-bold transition-all ${isSelected ? "text-white" : "text-[#D2691E] group-hover:gap-2"}`}>
+                  {isSelected ? "✓ Selected" : <>Select <FiArrowRight className="w-3 h-3" /></>}
                 </div>
               </div>
             </button>
           );
         })}
+      </div>
+
+      {/* Continue button — only shows after a selection */}
+      <div className={`mt-8 flex justify-center transition-all duration-300 ${selected ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none"}`}>
+        <button
+          onClick={handleContinue}
+          className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-[#D2691E] to-[#E8944A] text-white font-black rounded-2xl hover:opacity-90 transition-all shadow-xl shadow-[#D2691E]/30 text-base"
+        >
+          Continue to Menu
+          <FiArrowRight className="w-5 h-5" />
+        </button>
       </div>
     </div>
   );
