@@ -30,7 +30,7 @@ export default function LoyaltyCTA() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] rounded-full bg-[#D2691E]/10 blur-[120px] pointer-events-none" />
       <div className="relative z-10 container-site text-center">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#D2691E]/20 border border-[#D2691E]/30 text-[#E8944A] text-sm font-bold mb-6">
-          🚀 Launching soon
+          🚀 Launching Summer 2025
         </div>
         <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
           Be the first to earn points

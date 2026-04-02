@@ -177,6 +177,20 @@ export const MENU_ITEMS: MenuItem[] = [
     dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "dairy", "eggs"] },
     available: true, customizationOptions: [], popular: true,
   },
+  {
+    _id: "s3", name: "Banana & Walnut Loaf", category: "snacks",
+    description: "Moist, home-style banana loaf with toasted walnuts — served warm with butter.",
+    price: 3.50, imageUrl: "https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "dairy", "eggs", "nuts"] },
+    available: true, customizationOptions: [], chefsPick: true,
+  },
+  {
+    _id: "s4", name: "Granola Bowl", category: "snacks",
+    description: "House granola with Greek yoghurt, honey, and fresh seasonal fruit.",
+    price: 4.50, imageUrl: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "dairy", "nuts"] },
+    available: true, customizationOptions: [],
+  },
   // Cold Drinks
   {
     _id: "d1", name: "Fresh Orange Juice", category: "cold-drinks",
@@ -194,6 +208,20 @@ export const MENU_ITEMS: MenuItem[] = [
       { name: "Milk", options: ["Whole", "Oat", "Almond", "Soy"], additionalPrice: 0.40 },
     ], popular: true,
   },
+  {
+    _id: "d3", name: "Mango & Passion Smoothie", category: "cold-drinks",
+    description: "Frozen mango, passion fruit, and coconut water blended fresh to order.",
+    price: 4.80, imageUrl: "https://images.unsplash.com/photo-1505252585461-04db1eb84625?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: true, glutenFree: true, allergens: [] },
+    available: true, customizationOptions: [], popular: true,
+  },
+  {
+    _id: "d4", name: "Mint Lemonade", category: "cold-drinks",
+    description: "Fresh lemon juice, garden mint, and a hint of agave over crushed ice.",
+    price: 3.80, imageUrl: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: true, glutenFree: true, allergens: [] },
+    available: true, customizationOptions: [],
+  },
   // Desserts
   {
     _id: "ds1", name: "Chocolate Brownie", category: "desserts",
@@ -207,6 +235,20 @@ export const MENU_ITEMS: MenuItem[] = [
     description: "Ask your server for today's baked cheesecake selection.",
     price: 5.49, imageUrl: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy"] },
+    available: true, customizationOptions: [],
+  },
+  {
+    _id: "ds3", name: "Carrot Cake", category: "desserts",
+    description: "Spiced carrot cake with cream cheese frosting and a dusting of cinnamon.",
+    price: 4.99, imageUrl: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy", "nuts"] },
+    available: true, customizationOptions: [], chefsPick: true,
+  },
+  {
+    _id: "ds4", name: "Affogato", category: "desserts",
+    description: "A double shot of hot espresso poured over a scoop of vanilla ice cream.",
+    price: 4.50, imageUrl: "https://images.unsplash.com/photo-1568901839119-631418a3910d?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: true, allergens: ["dairy"] },
     available: true, customizationOptions: [],
   },
 ];

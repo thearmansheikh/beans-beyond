@@ -55,7 +55,7 @@ export default function LoyaltyHero() {
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#D2691E]/20 border border-[#D2691E]/30 text-[#E8944A] text-sm font-bold mb-8">
           <FiStar className="w-4 h-4" />
-          Coming Soon · Loyalty Programme
+          Launching Summer 2025 · Loyalty Programme
         </div>
 
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-white leading-[1.03] mb-6">

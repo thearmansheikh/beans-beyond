@@ -3,7 +3,7 @@ import type { IconType } from "react-icons";
 
 const PACKAGES: {
   name: string; Icon: IconType; guests: string; price: string; unit: string;
-  colour: string; badge: string; includes: string[];
+  minimum: string; colour: string; badge: string; includes: string[];
 }[] = [
   {
     name:  "Essential",
@@ -11,6 +11,7 @@ const PACKAGES: {
     guests: "Up to 20",
     price: "From £8",
     unit:  "per head",
+    minimum: "Min. 10 guests",
     colour: "border-gray-200 bg-white",
     badge:  "",
     includes: [
@@ -26,6 +27,7 @@ const PACKAGES: {
     guests: "Up to 50",
     price: "From £15",
     unit:  "per head",
+    minimum: "Min. 15 guests",
     colour: "border-[#D2691E] bg-[#D2691E]/3",
     badge:  "Most Popular",
     includes: [
@@ -42,6 +44,7 @@ const PACKAGES: {
     guests: "50 +",
     price: "From £22",
     unit:  "per head",
+    minimum: "Min. 30 guests",
     colour: "border-[#6F4E37] bg-[#1A0E07] text-white",
     badge:  "Full Service",
     includes: [
@@ -67,7 +70,7 @@ export default function CateringPackages() {
         </div>
 
         <div className="grid sm:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {PACKAGES.map(({ name, Icon, guests, price, unit, colour, badge, includes }) => {
+          {PACKAGES.map(({ name, Icon, guests, price, unit, minimum, colour, badge, includes }) => {
             const isDark = name === "Premium";
             return (
               <div
@@ -89,8 +92,11 @@ export default function CateringPackages() {
                   <span className={`text-3xl font-black ${isDark ? "text-[#E8944A]" : "text-[#D2691E]"}`}>{price}</span>
                   <span className={`text-sm ${isDark ? "text-white/50" : "text-[#333]/40"}`}>{unit}</span>
                 </div>
-                <p className={`text-xs mb-6 flex items-center gap-1.5 ${isDark ? "text-white/50" : "text-[#333]/40"}`}>
+                <p className={`text-xs flex items-center gap-1.5 ${isDark ? "text-white/50" : "text-[#333]/40"}`}>
                   <FiUsers className="w-3 h-3" />{guests} guests
+                </p>
+                <p className={`text-xs mb-6 mt-1 font-semibold ${isDark ? "text-white/40" : "text-[#333]/35"}`}>
+                  {minimum}
                 </p>
                 <ul className="space-y-3 flex-1">
                   {includes.map((item) => (

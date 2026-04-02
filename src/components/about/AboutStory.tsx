@@ -1,8 +1,8 @@
 const STATS = [
   { value: "2018", label: "Year founded" },
   { value: "700+", label: "Five-star reviews" },
-  { value: "4.6★", label: "Google rating" },
-  { value: "100%", label: "Fresh daily" },
+  { value: "4.5★", label: "Google rating" },
+  { value: "100%", label: "Halal certified" },
 ];
 
 export default function AboutStory() {
@@ -19,13 +19,13 @@ export default function AboutStory() {
             </h2>
             <div className="space-y-4 text-[#333]/65 leading-relaxed">
               <p>
-                Beans &amp; Beyond started with a simple idea: a neighbourhood café where the coffee was as good as the conversation. We opened our doors on Commercial Road with three tables, a second-hand espresso machine, and a lot of ambition.
+                Beans &amp; Beyond was born from a simple belief: East London deserved a café that felt like home. We opened on Commercial Road in 2018 with three tables, a second-hand espresso machine, and a menu scribbled on the back of a napkin.
               </p>
               <p>
-                Today, we serve hundreds of guests every week — from early-morning commuters grabbing a flat white, to afternoon regulars who&rsquo;ve made us their office, to weekend families for whom our full English has become a Saturday ritual.
+                Six years later, we serve hundreds of guests every week. Early-morning commuters who&rsquo;ve made us their daily ritual. Remote workers who treat our corner tables as their office. Weekend families for whom our full Halal English breakfast has become a Saturday tradition.
               </p>
               <p>
-                Everything is made fresh every morning. We work with local suppliers, cut food waste daily, and make sure there&rsquo;s something delicious for everyone — whether you eat meat, are fully vegan, or anywhere in between.
+                Everything on the menu is made fresh that morning using ingredients from local suppliers. We&rsquo;re 100% Halal certified, fully vegetarian-friendly, and committed to zero food waste — because great food and doing right by the community should never be in conflict.
               </p>
             </div>
 
