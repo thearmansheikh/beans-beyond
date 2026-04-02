@@ -6,6 +6,8 @@ import MenuHero from "@/components/menu/MenuHero";
 import MenuContent from "@/components/menu/MenuContent";
 import { getMenuItems } from "@/lib/menu";
 
+export const dynamic = "force-dynamic";
+
 export default async function MenuPage() {
   const menuItems = await getMenuItems();
 

@@ -1,15 +1,29 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { createBrowserClient } from "@supabase/ssr";
 
-const supabaseUrl  = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+// ── Client-side singleton (lazy — only created when first accessed) ──
+let _supabase: ReturnType<typeof createSupabaseClient> | null = null;
 
-// ── Client-side singleton (for forms, data fetching in client components) ──
-export const supabase = createSupabaseClient(supabaseUrl, supabaseAnon);
+export function getSupabase() {
+  if (_supabase) return _supabase;
+  const url  = process.env.NEXT_PUBLIC_SUPABASE_URL  ?? "";
+  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+  _supabase = createSupabaseClient(url, anon);
+  return _supabase;
+}
+
+// Keep named export for any existing direct usages — delegates to getter
+export const supabase = new Proxy({} as ReturnType<typeof createSupabaseClient>, {
+  get(_target, prop) {
+    return (getSupabase() as Record<string | symbol, unknown>)[prop];
+  },
+});
 
 // ── Browser client (for auth — persists session in cookies) ──
 export function createBrowserSupabaseClient() {
-  return createBrowserClient(supabaseUrl, supabaseAnon);
+  const url  = process.env.NEXT_PUBLIC_SUPABASE_URL  ?? "";
+  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+  return createBrowserClient(url, anon);
 }
 
 // ─── Database Types ────────────────────────────────────────────────────────
