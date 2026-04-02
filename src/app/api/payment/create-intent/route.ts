@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { createAdminClient } from "@/lib/supabase-server";
 
 export async function POST(req: NextRequest) {
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
     await supabase.from("order_items").insert(orderItems);
 
     // ── Create Stripe PaymentIntent ───────────────────────────────────────
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await getStripe().paymentIntents.create({
       amount:   totalPence,
       currency: "gbp",
       metadata: {
