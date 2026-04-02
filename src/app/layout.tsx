@@ -3,6 +3,7 @@ import { Poppins, Open_Sans } from "next/font/google";
 import "./globals.css";
 import CookieConsent from "@/components/common/CookieConsent";
 import BackToTop from "@/components/common/BackToTop";
+import PageTransition from "@/components/common/PageTransition";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -71,7 +72,7 @@ const jsonLd = {
   name: "Beans & Beyond",
   description: "Halal café and restaurant on Commercial Road, East London. Serving fresh breakfasts, brunch, lunch, and specialty coffee seven days a week.",
   url: "https://www.bbcafe.co.uk",
-  telephone: "020 3080 0000",
+  telephone: "020 3089 6961",
   email: "hello@bbcafe.co.uk",
   servesCuisine: ["British", "American", "Halal"],
   priceRange: "££",
@@ -90,18 +91,19 @@ const jsonLd = {
     longitude: -0.0224,
   },
   openingHoursSpecification: [
-    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], opens: "07:00", closes: "21:00" },
-    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Sunday"], opens: "08:00", closes: "20:00" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], opens: "08:00", closes: "22:00" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Sunday"], opens: "10:00", closes: "17:00" },
   ],
   aggregateRating: {
     "@type": "AggregateRating",
-    ratingValue: "3.5",
-    reviewCount: "17",
+    ratingValue: "4.5",
+    reviewCount: "120",
     bestRating: "5",
   },
   sameAs: [
-    "https://www.instagram.com/bbcafe",
-    "https://www.facebook.com/bbcafe",
+    "https://www.instagram.com/beans_beyond/",
+    "https://www.facebook.com/BeansBeyond",
+    "https://www.tiktok.com/@bbcafe",
   ],
 };
 
@@ -124,7 +126,7 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        {children}
+        <PageTransition>{children}</PageTransition>
         <BackToTop />
         <CookieConsent />
       </body>
