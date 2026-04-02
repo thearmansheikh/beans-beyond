@@ -12,7 +12,7 @@ export const RESTAURANT = {
   description: "Café, Breakfast & Brunch restaurant serving Halal food on Commercial Road, London E14.",
   address: "819-821 Commercial Road, London E14 7HG",
   phone: "020 3089 6961",
-  email: "info@bbcafe.co.uk",
+  email: "hello@bbcafe.co.uk",
   website: "https://www.bbcafe.co.uk",
   rating: 4.5,
   reviewCount: 120,
@@ -215,27 +215,37 @@ export const REVIEWS: Review[] = [
   {
     id: "r1", author: "Sarah M.", rating: 5,
     text: "Absolutely love this place! The flat white is the best I've had in East London. The atmosphere is warm and inviting — my go-to spot for working remotely.",
-    date: "2024-12-10", avatar: "",
+    date: "2025-03-10", avatar: "",
   },
   {
     id: "r2", author: "James T.", rating: 5,
     text: "The veggie breakfast is incredible. Fresh, generous portions and the staff are always so friendly. Been coming here every Saturday for over a year!",
-    date: "2024-11-28", avatar: "",
+    date: "2025-02-28", avatar: "",
   },
   {
     id: "r3", author: "Priya K.", rating: 5,
     text: "Hidden gem on Commercial Road. The matcha latte is phenomenal and the avocado toast is perfectly seasoned. Highly recommend to anyone nearby.",
-    date: "2024-12-02", avatar: "",
+    date: "2025-03-02", avatar: "",
   },
   {
     id: "r4", author: "David L.", rating: 4,
     text: "Great coffee and food at reasonable prices. The brownie is dangerously good. Gets busy on weekday mornings but always worth the short wait.",
-    date: "2024-10-15", avatar: "",
+    date: "2025-01-15", avatar: "",
   },
   {
     id: "r5", author: "Emma R.", rating: 5,
     text: "Best breakfast spot in E14 hands down. I've tried everything on the menu and never been disappointed. They really care about quality here.",
-    date: "2024-12-18", avatar: "",
+    date: "2025-03-18", avatar: "",
+  },
+  {
+    id: "r6", author: "Omar H.", rating: 4,
+    text: "Really solid halal café — hard to find quality like this in the area. The eggs benedict is excellent. Parking can be tricky but worth it.",
+    date: "2025-02-05", avatar: "",
+  },
+  {
+    id: "r7", author: "Chloe W.", rating: 3,
+    text: "Good food and nice atmosphere. Service was a bit slow on the Saturday I visited — understandable given how busy it was. The pancakes were lovely though.",
+    date: "2025-01-22", avatar: "",
   },
 ];
 

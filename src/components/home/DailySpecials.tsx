@@ -18,8 +18,16 @@ const DAY_SEEDS: number[][] = [
   [0, 4, 9], [1, 5, 7], [2, 3, 8], [0, 5, 9],
 ];
 
+function getLondonDay(): number {
+  const londonDate = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/London", weekday: "short",
+  }).format(new Date());
+  const map: Record<string, number> = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  return map[londonDate] ?? new Date().getDay();
+}
+
 function getTodaySpecials(): MenuItem[] {
-  const day     = new Date().getDay();
+  const day     = getLondonDay();
   const indices = DAY_SEEDS[day] ?? [0, 1, 2];
   const pool    = MENU_ITEMS.filter((i) => i.available);
   return indices.map((i) => pool[i % pool.length]).filter(Boolean);
@@ -34,14 +42,30 @@ const DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","
 interface Countdown { h: number; m: number; s: number }
 
 function getCountdown(): Countdown {
-  const now  = new Date();
-  const end  = new Date(now);
-  end.setHours(21, 0, 0, 0);
-  const diff = Math.max(0, end.getTime() - now.getTime());
+  const now = new Date();
+
+  // Get current time in London (handles BST/GMT automatically)
+  const londonFormatter = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/London",
+    hour: "numeric", minute: "numeric", second: "numeric",
+    hour12: false,
+  });
+  const parts = londonFormatter.formatToParts(now);
+  const get = (t: string) => parseInt(parts.find((p) => p.type === t)?.value ?? "0", 10);
+  const londonH = get("hour");
+  const londonM = get("minute");
+  const londonS = get("second");
+
+  // Seconds elapsed so far today in London time
+  const elapsedSec  = londonH * 3600 + londonM * 60 + londonS;
+  // Offer ends at 22:00 London time (matches closing time)
+  const endSec      = 22 * 3600;
+  const remainSec   = Math.max(0, endSec - elapsedSec);
+
   return {
-    h: Math.floor(diff / 3_600_000),
-    m: Math.floor((diff % 3_600_000) / 60_000),
-    s: Math.floor((diff % 60_000) / 1_000),
+    h: Math.floor(remainSec / 3600),
+    m: Math.floor((remainSec % 3600) / 60),
+    s: remainSec % 60,
   };
 }
 
@@ -179,7 +203,7 @@ export default function DailySpecials() {
 
   // Set the day name client-side only to avoid SSR timezone mismatch
   useEffect(() => {
-    setDayName(DAY_NAMES[new Date().getDay()] ?? "Today");
+    setDayName(DAY_NAMES[getLondonDay()] ?? "Today");
   }, []);
 
   if (TODAY_SPECIALS.length === 0) return null;
@@ -215,7 +239,7 @@ export default function DailySpecials() {
           {/* Countdown */}
           <div className="shrink-0 flex flex-col items-start sm:items-end gap-2">
             <p className="text-[10px] text-white/35 uppercase tracking-[0.2em] font-semibold">
-              Offer expires in
+              Expires at 22:00
             </p>
             <div className="flex items-center gap-2">
               <DigitBox value={h} unit="hrs" />
