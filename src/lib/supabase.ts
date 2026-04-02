@@ -15,7 +15,8 @@ export function getSupabase() {
 // Keep named export for any existing direct usages — delegates to getter
 export const supabase = new Proxy({} as ReturnType<typeof createSupabaseClient>, {
   get(_target, prop) {
-    return (getSupabase() as Record<string | symbol, unknown>)[prop];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (getSupabase() as any)[prop];
   },
 });
 
