@@ -16,7 +16,7 @@ export default function ContactPage() {
         <ContactQuickLinks />
 
         {/* Main content: Sidebar + Form */}
-        <section className="section-padding bg-white">
+        <section className="section-padding bg-[#F8F4EF]">
           <div className="container-site">
             <div className="grid lg:grid-cols-5 gap-10 xl:gap-14">
               <ContactSidebar />

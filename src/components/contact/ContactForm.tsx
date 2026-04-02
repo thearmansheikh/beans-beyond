@@ -56,7 +56,7 @@ export default function ContactForm() {
 
   return (
     <div className="lg:col-span-3">
-      <div className="rounded-2xl border border-[#EEE6DC] p-8 lg:p-10 bg-white shadow-sm">
+      <div className="rounded-2xl border border-[#EEE6DC] p-8 lg:p-10 bg-white shadow-md shadow-[#D2691E]/5">
         {sent ? (
           <div className="text-center py-12">
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#D2691E] to-[#E8944A] flex items-center justify-center mx-auto mb-6 shadow-xl shadow-[#D2691E]/25">
