@@ -68,6 +68,13 @@ export default function CartDrawer({ open, onClose }: Props) {
       applyPromo("", 0);
       return;
     }
+    // FREEBEAN is only valid for delivery orders
+    if (code === "FREEBEAN" && orderType !== "delivery") {
+      setPromoState("err");
+      setPromoLabel("FREEBEAN is only valid for delivery orders.");
+      applyPromo("", 0);
+      return;
+    }
     const result = fn(subtotal());
     applyPromo(code, result.amount);
     setPromoLabel(result.label);
@@ -325,7 +332,7 @@ export default function CartDrawer({ open, onClose }: Props) {
                     {promoState === "err" && (
                       <p className="flex items-center gap-1.5 text-xs text-red-600 font-semibold">
                         <FiAlertCircle className="w-3.5 h-3.5 shrink-0" />
-                        Invalid promo code. Try FREEBEAN, WELCOME10 or BB20.
+                        {promoLabel || "Invalid or expired promo code."}
                       </p>
                     )}
                   </div>

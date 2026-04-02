@@ -207,9 +207,11 @@ export default function Footer() {
             Halal Certified
           </div>
 
-          <Link href="/allergens" className="hover:text-white/55 transition-colors">
-            Allergen Information
-          </Link>
+          <div className="flex items-center gap-5">
+            <Link href="/privacy"   className="hover:text-white/55 transition-colors">Privacy Policy</Link>
+            <Link href="/terms"     className="hover:text-white/55 transition-colors">Terms</Link>
+            <Link href="/allergens" className="hover:text-white/55 transition-colors">Allergens</Link>
+          </div>
         </div>
       </div>
 

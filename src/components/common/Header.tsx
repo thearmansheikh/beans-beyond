@@ -111,7 +111,7 @@ export default function Header() {
             <div className="relative container-site flex items-center justify-center gap-2 py-2.5 px-8">
               <FiTag className="w-3 h-3 shrink-0 opacity-80 hidden xs:block" />
               <p className="text-[11px] sm:text-xs font-semibold text-center leading-snug">
-                <span className="hidden xs:inline">🎉 </span>Free delivery over £25 — use code{" "}
+                <span className="hidden xs:inline">🎉 </span>Free delivery over £20 — use code{" "}
                 <strong className="font-black tracking-wide bg-white/20 px-1.5 py-0.5 rounded-md whitespace-nowrap">
                   FREEBEAN
                 </strong>
@@ -551,7 +551,7 @@ export default function Header() {
                 {MENU_CATS.map((cat) => (
                   <Link
                     key={cat.slug}
-                    href="/menu"
+                    href={`/menu#cat-${cat.slug}`}
                     className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[#2C1A0E]/65 hover:bg-[#F5F5DC] hover:text-[#6F4E37] transition-colors"
                   >
                     <span className="text-lg leading-none">{cat.icon}</span>

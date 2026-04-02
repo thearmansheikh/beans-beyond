@@ -9,19 +9,25 @@ const PROMOS: Record<string, (sub: number) => PromoResult> = {
 };
 
 export async function POST(req: NextRequest) {
-  const { code, subtotal } = await req.json();
+  const { code, subtotal, orderType } = await req.json();
 
   if (!code || typeof code !== "string") {
     return NextResponse.json({ valid: false }, { status: 400 });
   }
 
-  const fn = PROMOS[code.trim().toUpperCase()];
+  const upper = code.trim().toUpperCase();
+  const fn = PROMOS[upper];
   if (!fn) {
     return NextResponse.json({ valid: false });
+  }
+
+  // FREEBEAN only applies to delivery orders
+  if (upper === "FREEBEAN" && orderType !== "delivery") {
+    return NextResponse.json({ valid: false, error: "FREEBEAN is only valid for delivery orders." });
   }
 
   const sub = typeof subtotal === "number" && subtotal > 0 ? subtotal : 0;
   const { amount, label } = fn(sub);
 
-  return NextResponse.json({ valid: true, code: code.trim().toUpperCase(), amount, label });
+  return NextResponse.json({ valid: true, code: upper, amount, label });
 }

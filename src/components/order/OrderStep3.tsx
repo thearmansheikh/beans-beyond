@@ -133,7 +133,7 @@ export default function OrderStep3({
   onBack: () => void;
   onComplete: (orderNumber: string) => void;
 }) {
-  const { orderType, items, subtotal, deliveryFee, serviceCharge, total, clearCart } = useCart();
+  const { orderType, items, subtotal, deliveryFee, serviceCharge, total, clearCart, promoCode, discount } = useCart();
 
   // Phase 1 state: contact + order details
   const [form, setForm] = useState<Partial<CheckoutFormData>>({
@@ -177,6 +177,8 @@ export default function OrderStep3({
           service_charge:   serviceCharge(),
           total:            total(),
           notes:            form.specialInstructions,
+          promo_code:       promoCode || undefined,
+          discount:         discount  || undefined,
         },
         items: items.map((item) => ({
           menuItemId:     item.menuItemId,

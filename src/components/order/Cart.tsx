@@ -35,7 +35,7 @@ export default function Cart() {
       const res  = await fetch("/api/promo/validate", {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ code, subtotal: sub }),
+        body:    JSON.stringify({ code, subtotal: sub, orderType }),
       });
       const data = await res.json();
       if (data.valid) {
@@ -44,6 +44,7 @@ export default function Cart() {
         setPromoLabel(data.label);
       } else {
         setPromoState("err");
+        setPromoLabel(data.error ?? "");
         applyPromo("", 0);
       }
     } catch {
@@ -195,7 +196,7 @@ export default function Cart() {
         )}
         {promoState === "err" && (
           <p className="mt-1.5 text-xs text-red-600 px-1">
-            Invalid or expired promo code.
+            {promoLabel || "Invalid or expired promo code."}
           </p>
         )}
       </div>

@@ -12,25 +12,39 @@ export function formatDate(dateStr: string): string {
 }
 
 // ─── Hours helpers ────────────────────────────
+function getLondonParts(date: Date) {
+  const fmt = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/London",
+    weekday: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+  const parts = fmt.formatToParts(date);
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "0";
+  return {
+    day:    get("weekday"),
+    hour:   parseInt(get("hour"),   10),
+    minute: parseInt(get("minute"), 10),
+  };
+}
+
 export function isRestaurantOpen(): boolean {
-  const now = new Date();
-  const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-  const todayName = dayNames[now.getDay()];
-  const todayHours = HOURS.find((h) => h.day === todayName);
+  const { day, hour, minute } = getLondonParts(new Date());
+  const todayHours = HOURS.find((h) => h.day === day);
   if (!todayHours || todayHours.closed) return false;
 
   const [openH, openM]   = todayHours.open.split(":").map(Number);
   const [closeH, closeM] = todayHours.close.split(":").map(Number);
-  const nowMins  = now.getHours() * 60 + now.getMinutes();
-  const openMins = openH * 60 + openM;
-  const closeMins= closeH * 60 + closeM;
+  const nowMins   = hour * 60 + minute;
+  const openMins  = openH * 60 + openM;
+  const closeMins = closeH * 60 + closeM;
   return nowMins >= openMins && nowMins < closeMins;
 }
 
 export function getTodayHours(): string {
-  const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-  const todayName = dayNames[new Date().getDay()];
-  const todayHours = HOURS.find((h) => h.day === todayName);
+  const { day } = getLondonParts(new Date());
+  const todayHours = HOURS.find((h) => h.day === day);
   if (!todayHours || todayHours.closed) return "Closed today";
   return `${todayHours.open} – ${todayHours.close}`;
 }
