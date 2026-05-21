@@ -52,8 +52,8 @@ export default function MenuContent({ initialItems }: { initialItems?: MenuItem[
     <>
       <Toaster position="bottom-right" />
 
-      {/* Sticky filter bar */}
-      <div className="sticky z-30 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm" style={{ top: "var(--header-h, 108px)" }}>
+      {/* Filter bar (scrolls with page) */}
+      <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="container-site py-3">
           <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
 
