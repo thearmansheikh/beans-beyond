@@ -42,53 +42,121 @@ export const MENU_CATEGORIES: MenuCategory[] = [
   { _id: "1", name: "All",        slug: "all",        displayOrder: 0, icon: "🍽️" },
   { _id: "2", name: "Breakfast",  slug: "breakfast",  displayOrder: 1, icon: "🍳" },
   { _id: "3", name: "Coffee",     slug: "coffee",     displayOrder: 2, icon: "☕" },
-  { _id: "4", name: "Lunch",      slug: "lunch",      displayOrder: 3, icon: "🥗" },
+  { _id: "4", name: "Mains",      slug: "lunch",      displayOrder: 3, icon: "🥘" },
   { _id: "5", name: "Snacks",     slug: "snacks",     displayOrder: 4, icon: "🥐" },
   { _id: "6", name: "Cold Drinks",slug: "cold-drinks",displayOrder: 5, icon: "🥤" },
   { _id: "7", name: "Desserts",   slug: "desserts",   displayOrder: 6, icon: "🍰" },
 ];
 
+// All food is 100% halal. Photos via Unsplash CDN.
+// To swap in a real BB photo, drop the file into /public/images/menu/<name>.jpg
+// and replace the imageUrl with "/images/menu/<name>.jpg".
 export const MENU_ITEMS: MenuItem[] = [
-  // Breakfast
+  // ─── BREAKFAST ───
   {
     _id: "b1", name: "Full English Breakfast", category: "breakfast",
-    description: "Two eggs, bacon, sausages, baked beans, grilled tomato, mushrooms & toast.",
-    price: 9.99, imageUrl: "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=600&q=80",
-    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy"] },
-    available: true, customizationOptions: [], popular: true,
+    description: "2 eggs, 3 rashers of bacon, sausage, cherry tomato, mushrooms, baked beans & fries. Halal.",
+    price: 9.95, imageUrl: "/images/menu/full-english.jpg",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["eggs"] },
+    available: true, customizationOptions: [
+      { name: "Toast", options: ["White", "Brown", "Sourdough", "No toast"], additionalPrice: 0 },
+      { name: "Eggs", options: ["Scrambled", "Fried", "Poached"], additionalPrice: 0 },
+    ], popular: true,
   },
   {
     _id: "b2", name: "Veggie Breakfast", category: "breakfast",
-    description: "Two eggs, halloumi, avocado, baked beans, grilled tomato, mushrooms & toast.",
-    price: 9.49, imageUrl: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&q=80",
+    description: "2 eggs, grilled halloumi, smashed avocado, baked beans, grilled tomato, mushrooms & toast.",
+    price: 9.45, imageUrl: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy"] },
-    available: true, customizationOptions: [], popular: true,
+    available: true, customizationOptions: [
+      { name: "Eggs", options: ["Scrambled", "Fried", "Poached"], additionalPrice: 0 },
+    ], popular: true,
   },
   {
-    _id: "b3", name: "Eggs Benedict", category: "breakfast",
-    description: "Poached eggs on toasted English muffin with Canadian bacon and hollandaise.",
-    price: 8.99, imageUrl: "https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=600&q=80",
+    _id: "b3", name: "Beans & Beyond Big Breakfast", category: "breakfast",
+    description: "Our signature feast — 2 eggs, beef sausages, turkey bacon, hash browns, beans, mushrooms, grilled tomato, halloumi & sourdough.",
+    price: 12.95, imageUrl: "/images/menu/big-breakfast.jpg",
     dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy"] },
     available: true, customizationOptions: [], chefsPick: true,
   },
   {
-    _id: "b4", name: "Avocado Toast", category: "breakfast",
-    description: "Smashed avocado on sourdough with cherry tomatoes, feta & everything bagel seasoning.",
-    price: 7.99, imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80",
-    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "dairy"] },
-    available: true, customizationOptions: [], popular: true,
+    _id: "b4", name: "Eggs Benedict", category: "breakfast",
+    description: "Poached eggs on a toasted English muffin with turkey ham and rich hollandaise sauce.",
+    price: 8.95, imageUrl: "https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=600&q=80",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy"] },
+    available: true, customizationOptions: [], chefsPick: true,
   },
   {
-    _id: "b5", name: "Pancake Stack", category: "breakfast",
-    description: "Fluffy American pancakes with maple syrup, fresh berries, and clotted cream.",
-    price: 8.49, imageUrl: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80",
+    _id: "b5", name: "Eggs Florentine", category: "breakfast",
+    description: "Poached eggs on toasted muffin with wilted spinach and hollandaise. Vegetarian classic.",
+    price: 8.45, imageUrl: "https://images.unsplash.com/photo-1645802734055-886b819da175?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy"] },
     available: true, customizationOptions: [],
   },
-  // Coffee
   {
-    _id: "c1", name: "Flat White", category: "coffee",
-    description: "Two ristretto shots with velvety steamed milk in a smaller serve.",
+    _id: "b6", name: "Smashed Avocado Toast", category: "breakfast",
+    description: "Smashed avocado on toasted sourdough with cherry tomatoes, feta, chilli flakes & lemon.",
+    price: 7.95, imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "dairy"] },
+    available: true, customizationOptions: [
+      { name: "Add", options: ["None", "Poached egg (+£1.50)", "Halloumi (+£2)", "Smoked salmon (+£3)"], additionalPrice: 0 },
+    ], popular: true,
+  },
+  {
+    _id: "b7", name: "Pancake Stack", category: "breakfast",
+    description: "Fluffy American pancakes with maple syrup, fresh berries & clotted cream — add bacon and eggs for a sweet & savoury brunch.",
+    price: 7.95, imageUrl: "/images/menu/pancake-stack.jpg",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy"] },
+    available: true, customizationOptions: [
+      { name: "Top with", options: ["Berries & cream", "Nutella & banana", "Lotus Biscoff", "Bacon & syrup"], additionalPrice: 0 },
+    ],
+  },
+  {
+    _id: "b8", name: "Shakshuka", category: "breakfast",
+    description: "Two eggs baked in spiced tomato & pepper sauce with feta — served with warm pitta.",
+    price: 8.95, imageUrl: "https://images.unsplash.com/photo-1590412200988-a436970781fa?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy"] },
+    available: true, customizationOptions: [], chefsPick: true,
+  },
+  {
+    _id: "b9", name: "French Toast", category: "breakfast",
+    description: "Brioche dipped in cinnamon custard, pan-fried golden — topped with berries & maple.",
+    price: 7.95, imageUrl: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy"] },
+    available: true, customizationOptions: [],
+  },
+  {
+    _id: "b10", name: "Kids Breakfast", category: "breakfast",
+    description: "1 rasher of bacon, 1 egg & Heinz beans — served with a Fruit Shoot or canned drink.",
+    price: 4.95, imageUrl: "https://images.unsplash.com/photo-1558672367-241cd1a01b16?w=600&q=80",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["eggs"] },
+    available: true, customizationOptions: [
+      { name: "Drink", options: ["Fruit Shoot", "Coke", "Diet Coke", "Sprite", "Apple juice"], additionalPrice: 0 },
+    ],
+  },
+  {
+    _id: "b11", name: "Beef Steak Breakfast", category: "breakfast",
+    description: "Grilled beef steak patty, 2 sausages, 2 rashers of bacon, 2 fried eggs, grilled tomatoes, mushrooms & fries.",
+    price: 12.95, imageUrl: "/images/menu/beef-steak-breakfast.jpg",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["eggs"] },
+    available: true, customizationOptions: [
+      { name: "Eggs", options: ["Scrambled", "Fried", "Poached"], additionalPrice: 0 },
+    ], chefsPick: true,
+  },
+
+  // ─── COFFEE ───
+  {
+    _id: "c1", name: "Espresso", category: "coffee",
+    description: "A short, intense shot of our signature house blend — bold and chocolatey.",
+    price: 2.50, imageUrl: "https://images.unsplash.com/photo-1579992357154-faf4bde95b3d?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: true, glutenFree: true, allergens: [] },
+    available: true, customizationOptions: [
+      { name: "Shots", options: ["Single", "Double"], additionalPrice: 0.50 },
+    ],
+  },
+  {
+    _id: "c2", name: "Flat White", category: "coffee",
+    description: "Two ristretto shots with velvety steamed milk — silky and rich.",
     price: 3.50, imageUrl: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: false, glutenFree: true, allergens: ["dairy"] },
     available: true, customizationOptions: [
@@ -97,7 +165,7 @@ export const MENU_ITEMS: MenuItem[] = [
     ], popular: true,
   },
   {
-    _id: "c2", name: "Cappuccino", category: "coffee",
+    _id: "c3", name: "Cappuccino", category: "coffee",
     description: "Equal parts espresso, steamed milk and thick foam with a dusting of cocoa.",
     price: 3.20, imageUrl: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: false, glutenFree: true, allergens: ["dairy"] },
@@ -106,8 +174,8 @@ export const MENU_ITEMS: MenuItem[] = [
     ],
   },
   {
-    _id: "c3", name: "Americano", category: "coffee",
-    description: "Smooth espresso diluted with hot water — black or with milk on the side.",
+    _id: "c4", name: "Americano", category: "coffee",
+    description: "Smooth espresso topped up with hot water — black or with milk on the side.",
     price: 2.80, imageUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: true, glutenFree: true, allergens: [] },
     available: true, customizationOptions: [
@@ -115,54 +183,221 @@ export const MENU_ITEMS: MenuItem[] = [
     ],
   },
   {
-    _id: "c4", name: "Latte", category: "coffee",
+    _id: "c5", name: "Latte", category: "coffee",
     description: "A generous pour of steamed milk over a double shot of espresso.",
     price: 3.30, imageUrl: "https://images.unsplash.com/photo-1561047029-3000c68339ca?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: false, glutenFree: true, allergens: ["dairy"] },
     available: true, customizationOptions: [
       { name: "Milk", options: ["Whole", "Semi-skimmed", "Oat", "Almond", "Soy"], additionalPrice: 0.40 },
-      { name: "Syrup", options: ["None", "Vanilla", "Caramel", "Hazelnut"], additionalPrice: 0.50 },
+      { name: "Syrup", options: ["None", "Vanilla", "Caramel", "Hazelnut", "Biscoff"], additionalPrice: 0.50 },
     ], popular: true,
   },
   {
-    _id: "c5", name: "Matcha Latte", category: "coffee",
-    description: "Ceremonial grade matcha whisked with steamed oat milk and a touch of honey.",
+    _id: "c6", name: "Mocha", category: "coffee",
+    description: "Espresso with rich dark chocolate, steamed milk, and a swirl of cream.",
+    price: 3.80, imageUrl: "https://images.unsplash.com/photo-1618576230663-9714aecfb99a?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: true, allergens: ["dairy"] },
+    available: true, customizationOptions: [
+      { name: "Milk", options: ["Whole", "Semi-skimmed", "Oat", "Almond", "Soy"], additionalPrice: 0.40 },
+    ],
+  },
+  {
+    _id: "c7", name: "Hot Chocolate", category: "coffee",
+    description: "Real Belgian chocolate melted into steamed milk, topped with cream & marshmallows.",
+    price: 3.50, imageUrl: "https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: true, allergens: ["dairy"] },
+    available: true, customizationOptions: [
+      { name: "Milk", options: ["Whole", "Oat", "Almond"], additionalPrice: 0.40 },
+    ],
+  },
+  {
+    _id: "c8", name: "Matcha Latte", category: "coffee",
+    description: "Ceremonial-grade matcha whisked with steamed oat milk and a touch of honey.",
     price: 4.20, imageUrl: "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: false, glutenFree: true, allergens: ["dairy"] },
     available: true, customizationOptions: [
       { name: "Sweetness", options: ["None", "Honey", "Vanilla syrup"], additionalPrice: 0 },
     ], popular: true, chefsPick: true,
   },
-  // Lunch
   {
-    _id: "l1", name: "Club Sandwich", category: "lunch",
-    description: "Triple-decker with chicken, bacon, egg, lettuce, tomato & mayo on toasted bread.",
-    price: 8.99, imageUrl: "https://images.unsplash.com/photo-1528736235302-52922df5c122?w=600&q=80",
+    _id: "c9", name: "Chai Latte", category: "coffee",
+    description: "Spiced black tea infused with cardamom, cinnamon & ginger — steamed with milk.",
+    price: 3.80, imageUrl: "https://images.unsplash.com/photo-1578899952107-9c390f1af1b7?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: true, allergens: ["dairy"] },
+    available: true, customizationOptions: [
+      { name: "Milk", options: ["Whole", "Oat", "Almond", "Soy"], additionalPrice: 0.40 },
+    ],
+  },
+
+  // ─── MAINS ───
+  {
+    _id: "l1", name: "Lamb Chops & Mash", category: "lunch",
+    description: "Three tender lamb cutlets, freshly made mash, mixed vegetables & rich gravy.",
+    price: 14.95, imageUrl: "/images/menu/lamb-chops-mash.jpg",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["dairy", "gluten"] },
+    available: true, customizationOptions: [], chefsPick: true, popular: true,
+  },
+  {
+    _id: "l2", name: "Cod & Chips", category: "lunch",
+    description: "Freshly battered cod fillet, golden chips, garden peas & mixed salad. Tartare on the side.",
+    price: 10.95, imageUrl: "https://images.unsplash.com/photo-1580217593608-61931cefc821?w=600&q=80",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten", "fish", "eggs"] },
+    available: true, customizationOptions: [], popular: true,
+  },
+  {
+    _id: "l3", name: "Beef Lasagne", category: "lunch",
+    description: "Slow-cooked beef ragu layered with pasta sheets and béchamel, baked until golden.",
+    price: 11.95, imageUrl: "https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=600&q=80",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten", "dairy", "eggs"] },
+    available: true, customizationOptions: [],
+  },
+  {
+    _id: "l4", name: "Loaded Jacket Potato", category: "lunch",
+    description: "Oven-baked jacket potato with butter, your choice of filling, and a side salad.",
+    price: 8.95, imageUrl: "https://images.unsplash.com/photo-1665931040985-88ceff0fd38e?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: true, allergens: ["dairy"] },
+    available: true, customizationOptions: [
+      { name: "Filling", options: ["Beans & cheese", "Tuna mayo & sweetcorn", "Chilli con carne", "Coleslaw"], additionalPrice: 0 },
+    ],
+  },
+  {
+    _id: "l5", name: "Beans & Beyond Burger", category: "lunch",
+    description: "6oz beef patty, smoked cheese, crispy onion rings, lettuce, tomato & house burger sauce in a sesame brioche bun. Served with curly fries and a side of beans.",
+    price: 11.95, imageUrl: "/images/menu/bb-burger.jpg",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten", "dairy", "eggs", "sesame"] },
+    available: true, customizationOptions: [
+      { name: "Add", options: ["None", "Bacon (+£1.50)", "Extra patty (+£3)", "Halloumi (+£2)"], additionalPrice: 0 },
+    ], popular: true, chefsPick: true,
+  },
+  {
+    _id: "l6", name: "Peri Peri Chicken Burger", category: "lunch",
+    description: "Grilled chicken fillet glazed in peri peri sauce, lettuce, tomato & garlic mayo in a brioche bun. With fries.",
+    price: 10.95, imageUrl: "/images/menu/peri-peri-chicken-burger.jpg",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy", "sesame"] },
+    available: true, customizationOptions: [
+      { name: "Heat", options: ["Lemon & herb", "Mild", "Medium", "Hot", "Extra hot"], additionalPrice: 0 },
+    ], popular: true,
+  },
+  {
+    _id: "l7", name: "Halloumi Burger", category: "lunch",
+    description: "Thick-cut grilled halloumi, roasted red peppers, rocket & sweet chilli mayo. Served with fries.",
+    price: 9.95, imageUrl: "https://images.unsplash.com/photo-1610440042657-612c34d95e9f?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "dairy", "eggs", "sesame"] },
+    available: true, customizationOptions: [],
+  },
+  {
+    _id: "l8", name: "Halloumi Wrap", category: "lunch",
+    description: "Grilled halloumi, roasted peppers, spinach, hummus & sweet chilli in a warm tortilla.",
+    price: 8.95, imageUrl: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "dairy", "sesame"] },
+    available: true, customizationOptions: [],
+  },
+  {
+    _id: "l9", name: "Club Sandwich", category: "lunch",
+    description: "Triple-decker with grilled chicken, turkey bacon, egg, lettuce, tomato & mayo on toasted bread. With fries.",
+    price: 9.45, imageUrl: "https://images.unsplash.com/photo-1528736235302-52922df5c122?w=600&q=80",
     dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy"] },
     available: true, customizationOptions: [], popular: true,
   },
   {
-    _id: "l2", name: "Halloumi Wrap", category: "lunch",
-    description: "Grilled halloumi, roasted peppers, spinach, hummus & sweet chilli in a warm tortilla.",
-    price: 8.49, imageUrl: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=600&q=80",
-    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "dairy"] },
-    available: true, customizationOptions: [], chefsPick: true,
-  },
-  {
-    _id: "l3", name: "Chicken Caesar Salad", category: "lunch",
-    description: "Grilled chicken, romaine, parmesan, croutons & house Caesar dressing.",
-    price: 9.49, imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80",
+    _id: "l10", name: "Chicken Caesar Salad", category: "lunch",
+    description: "Grilled chicken breast, crisp romaine, shaved parmesan, croutons & house Caesar dressing.",
+    price: 9.95, imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80",
     dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy", "fish"] },
     available: true, customizationOptions: [],
   },
   {
-    _id: "l4", name: "Soup of the Day", category: "lunch",
-    description: "Ask your server for today's freshly made soup, served with crusty bread.",
-    price: 5.99, imageUrl: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&q=80",
-    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten"] },
+    _id: "l11", name: "Soup of the Day", category: "lunch",
+    description: "Ask your server — freshly made daily, served with crusty bread & butter.",
+    price: 5.95, imageUrl: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "dairy"] },
     available: true, customizationOptions: [],
   },
-  // Snacks
+  {
+    _id: "l12", name: "Unlimited Burger", category: "lunch",
+    description: "Grand-opening offer — eat as much as you can. One sitting. No conditions.",
+    price: 10.00, imageUrl: "https://images.unsplash.com/photo-1632898658005-af95f6fa589c?w=600&q=80",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten", "dairy", "eggs", "sesame"] },
+    available: true, customizationOptions: [], popular: true,
+  },
+  {
+    _id: "l13", name: "Grilled Lamb Cutlets", category: "lunch",
+    description: "Four chargrilled lamb cutlets marinated in herbs & spices, served on creamy mash with diced tomato salsa & fresh parsley.",
+    price: 16.95, imageUrl: "/images/menu/grilled-lamb-cutlets.jpg",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: true, allergens: ["dairy"] },
+    available: true, customizationOptions: [], chefsPick: true,
+  },
+  {
+    _id: "l14", name: "BB Mixed Grill", category: "lunch",
+    description: "Grilled chicken shish, lamb shish & seekh kebab on a bed of vermicelli rice with hummus, fresh salad & garlic sauce.",
+    price: 15.95, imageUrl: "/images/menu/mixed-grill.jpg",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["sesame", "dairy"] },
+    available: true, customizationOptions: [], popular: true, chefsPick: true,
+  },
+  {
+    _id: "l15", name: "Seekh Kebab Platter", category: "lunch",
+    description: "Two chargrilled lamb seekh kebabs on vermicelli rice with hummus, mixed salad, pickled carrot & lemon.",
+    price: 12.95, imageUrl: "/images/menu/seekh-kebab-platter.jpg",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["sesame", "dairy"] },
+    available: true, customizationOptions: [], popular: true,
+  },
+  {
+    _id: "l16", name: "Chicken Shish Pitta", category: "lunch",
+    description: "Marinated grilled chicken cubes with grilled peppers, fries, fresh salad & warm pitta bread.",
+    price: 11.95, imageUrl: "/images/menu/chicken-shish-pitta.jpg",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten", "sesame"] },
+    available: true, customizationOptions: [
+      { name: "Sauce", options: ["Garlic mayo", "Chilli", "Mint yoghurt", "BBQ"], additionalPrice: 0 },
+    ],
+  },
+  {
+    _id: "l17", name: "BBQ Chicken & Rice", category: "lunch",
+    description: "Tender grilled chicken fillets glazed in smoky BBQ sauce, served on vermicelli pilaf rice with cucumber, tomato & red cabbage salad.",
+    price: 10.95, imageUrl: "/images/menu/bbq-chicken-rice.jpg",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten"] },
+    available: true, customizationOptions: [], popular: true,
+  },
+  {
+    _id: "l18", name: "Grilled Chicken Pasta", category: "lunch",
+    description: "Grilled chicken strips over penne in a rich tomato sauce, finished with chimichurri & served with toasted garlic bread.",
+    price: 11.95, imageUrl: "/images/menu/grilled-chicken-pasta.jpg",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten", "dairy"] },
+    available: true, customizationOptions: [
+      { name: "Sauce", options: ["Tomato", "Creamy alfredo", "Arrabbiata (spicy)"], additionalPrice: 0 },
+    ], chefsPick: true,
+  },
+  {
+    _id: "l19", name: "Cajun Chicken & Garlic Bread", category: "lunch",
+    description: "Pan-seared cajun-spiced chicken bites with sautéed peppers, served with golden garlic bread.",
+    price: 10.95, imageUrl: "/images/menu/cajun-chicken-garlic-bread.jpg",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten", "dairy"] },
+    available: true, customizationOptions: [],
+  },
+  {
+    _id: "l20", name: "Spicy Chicken Noodles", category: "lunch",
+    description: "Wok-tossed noodles with chicken, peppers, chilli & garlic — served with cucumber and tomato.",
+    price: 10.95, imageUrl: "/images/menu/spicy-chicken-noodles.jpg",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten", "soy", "sesame"] },
+    available: true, customizationOptions: [
+      { name: "Heat", options: ["Mild", "Medium", "Hot", "Extra hot"], additionalPrice: 0 },
+    ],
+  },
+  {
+    _id: "l21", name: "Chicken Parmigiana", category: "lunch",
+    description: "Breaded chicken escalope topped with mozzarella & tomato sugo, served with fries, slaw & fresh salad.",
+    price: 11.95, imageUrl: "/images/menu/chicken-parmigiana.jpg",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten", "dairy", "eggs"] },
+    available: true, customizationOptions: [],
+  },
+  {
+    _id: "l22", name: "Beans & Beyond Special Platter", category: "lunch",
+    description: "Our house feast — spiced fried chicken, beef mince curry, chickpea stew, pilaf rice, cucumber salad with seasonal fruit & dates.",
+    price: 15.95, imageUrl: "/images/menu/bb-special-platter.jpg",
+    dietaryInfo: { vegetarian: false, vegan: false, glutenFree: false, allergens: ["gluten"] },
+    available: true, customizationOptions: [], chefsPick: true,
+  },
+
+  // ─── SNACKS ───
   {
     _id: "s1", name: "Butter Croissant", category: "snacks",
     description: "Freshly baked, golden, buttery croissant — perfect with a coffee.",
@@ -186,12 +421,27 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     _id: "s4", name: "Granola Bowl", category: "snacks",
-    description: "House granola with Greek yoghurt, honey, and fresh seasonal fruit.",
+    description: "House granola with thick Greek yoghurt, honey, and fresh seasonal fruit.",
     price: 4.50, imageUrl: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "dairy", "nuts"] },
     available: true, customizationOptions: [],
   },
-  // Cold Drinks
+  {
+    _id: "s5", name: "Scone with Jam & Cream", category: "snacks",
+    description: "Warm fruit scone served with strawberry jam and Cornish clotted cream.",
+    price: 3.95, imageUrl: "https://images.unsplash.com/photo-1593954134618-5f29b4bd5433?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "dairy", "eggs"] },
+    available: true, customizationOptions: [],
+  },
+  {
+    _id: "s6", name: "House Coleslaw", category: "snacks",
+    description: "Crisp cabbage, carrot & red onion in a creamy mayo dressing — perfect with burgers and grills.",
+    price: 2.50, imageUrl: "/images/menu/coleslaw.jpg",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: true, allergens: ["eggs", "dairy"] },
+    available: true, customizationOptions: [],
+  },
+
+  // ─── COLD DRINKS ───
   {
     _id: "d1", name: "Fresh Orange Juice", category: "cold-drinks",
     description: "Freshly squeezed Valencian oranges — pure sunshine in a glass.",
@@ -206,46 +456,101 @@ export const MENU_ITEMS: MenuItem[] = [
     dietaryInfo: { vegetarian: true, vegan: false, glutenFree: true, allergens: ["dairy"] },
     available: true, customizationOptions: [
       { name: "Milk", options: ["Whole", "Oat", "Almond", "Soy"], additionalPrice: 0.40 },
+      { name: "Syrup", options: ["None", "Vanilla", "Caramel", "Biscoff"], additionalPrice: 0.50 },
     ], popular: true,
   },
   {
-    _id: "d3", name: "Mango & Passion Smoothie", category: "cold-drinks",
+    _id: "d3", name: "Iced Matcha", category: "cold-drinks",
+    description: "Ceremonial matcha shaken over ice with cold oat milk.",
+    price: 4.50, imageUrl: "https://images.unsplash.com/photo-1717603545758-88cc454db69b?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: true, glutenFree: true, allergens: [] },
+    available: true, customizationOptions: [],
+  },
+  {
+    _id: "d4", name: "Mango & Passion Smoothie", category: "cold-drinks",
     description: "Frozen mango, passion fruit, and coconut water blended fresh to order.",
     price: 4.80, imageUrl: "https://images.unsplash.com/photo-1505252585461-04db1eb84625?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: true, glutenFree: true, allergens: [] },
     available: true, customizationOptions: [], popular: true,
   },
   {
-    _id: "d4", name: "Mint Lemonade", category: "cold-drinks",
+    _id: "d5", name: "Berry Blast Smoothie", category: "cold-drinks",
+    description: "Strawberries, blueberries, raspberry, banana & apple juice blended thick.",
+    price: 4.80, imageUrl: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: true, glutenFree: true, allergens: [] },
+    available: true, customizationOptions: [],
+  },
+  {
+    _id: "d6", name: "Vanilla Milkshake", category: "cold-drinks",
+    description: "Thick vanilla ice-cream shake topped with whipped cream and a wafer.",
+    price: 4.50, imageUrl: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["dairy", "gluten"] },
+    available: true, customizationOptions: [
+      { name: "Flavour", options: ["Vanilla", "Chocolate", "Strawberry", "Oreo", "Biscoff"], additionalPrice: 0 },
+    ], popular: true,
+  },
+  {
+    _id: "d7", name: "Mint Lemonade", category: "cold-drinks",
     description: "Fresh lemon juice, garden mint, and a hint of agave over crushed ice.",
     price: 3.80, imageUrl: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: true, glutenFree: true, allergens: [] },
     available: true, customizationOptions: [],
   },
-  // Desserts
+  {
+    _id: "d8", name: "Soft Drink", category: "cold-drinks",
+    description: "Coke, Diet Coke, Sprite, Fanta, or sparkling water — 330ml can.",
+    price: 1.95, imageUrl: "https://images.unsplash.com/photo-1665485765436-696f45219ed6?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: true, glutenFree: true, allergens: [] },
+    available: true, customizationOptions: [
+      { name: "Choice", options: ["Coke", "Diet Coke", "Sprite", "Fanta", "Sparkling water"], additionalPrice: 0 },
+    ],
+  },
+
+  // ─── DESSERTS ───
   {
     _id: "ds1", name: "Chocolate Brownie", category: "desserts",
-    description: "Warm gooey brownie with a scoop of vanilla ice cream.",
-    price: 5.99, imageUrl: "https://images.unsplash.com/photo-1564355808539-22fda35bed7e?w=600&q=80",
+    description: "Warm gooey brownie with a scoop of vanilla ice cream and chocolate sauce.",
+    price: 5.95, imageUrl: "https://images.unsplash.com/photo-1564355808539-22fda35bed7e?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy"] },
     available: true, customizationOptions: [], popular: true,
   },
   {
     _id: "ds2", name: "Cheesecake of the Day", category: "desserts",
-    description: "Ask your server for today's baked cheesecake selection.",
-    price: 5.49, imageUrl: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=600&q=80",
+    description: "Ask your server for today's baked cheesecake — Biscoff, vanilla berry, or salted caramel.",
+    price: 5.50, imageUrl: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy"] },
     available: true, customizationOptions: [],
   },
   {
     _id: "ds3", name: "Carrot Cake", category: "desserts",
-    description: "Spiced carrot cake with cream cheese frosting and a dusting of cinnamon.",
-    price: 4.99, imageUrl: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=600&q=80",
+    description: "Spiced carrot cake with cream cheese frosting, walnuts & a dusting of cinnamon.",
+    price: 4.95, imageUrl: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy", "nuts"] },
     available: true, customizationOptions: [], chefsPick: true,
   },
   {
-    _id: "ds4", name: "Affogato", category: "desserts",
+    _id: "ds4", name: "Sticky Toffee Pudding", category: "desserts",
+    description: "Date sponge soaked in warm toffee sauce, served with vanilla ice cream.",
+    price: 5.95, imageUrl: "https://images.unsplash.com/photo-1604423907382-6eaa8b5ccb3a?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy"] },
+    available: true, customizationOptions: [],
+  },
+  {
+    _id: "ds5", name: "Tiramisu", category: "desserts",
+    description: "Coffee-soaked sponge layered with mascarpone cream and dusted with cocoa. Alcohol-free.",
+    price: 5.50, imageUrl: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "eggs", "dairy"] },
+    available: true, customizationOptions: [],
+  },
+  {
+    _id: "ds6", name: "Baklava (3 pieces)", category: "desserts",
+    description: "Layered filo with pistachios, walnuts & honey syrup — served with Turkish coffee on the side, optional.",
+    price: 4.95, imageUrl: "https://images.unsplash.com/photo-1617806501553-d3a6a3a7b227?w=600&q=80",
+    dietaryInfo: { vegetarian: true, vegan: false, glutenFree: false, allergens: ["gluten", "dairy", "nuts"] },
+    available: true, customizationOptions: [], popular: true,
+  },
+  {
+    _id: "ds7", name: "Affogato", category: "desserts",
     description: "A double shot of hot espresso poured over a scoop of vanilla ice cream.",
     price: 4.50, imageUrl: "https://images.unsplash.com/photo-1568901839119-631418a3910d?w=600&q=80",
     dietaryInfo: { vegetarian: true, vegan: false, glutenFree: true, allergens: ["dairy"] },

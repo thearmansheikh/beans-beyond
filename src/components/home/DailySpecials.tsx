@@ -114,7 +114,7 @@ function DigitBox({ value, unit }: { value: number; unit: string }) {
 /* ── Special card ── */
 function SpecialCard({ item, discount, index }: { item: MenuItem; discount: number; index: number }) {
   const { addItem } = useCart();
-  const isExternal  = item.imageUrl.startsWith("http");
+  const hasImage    = !!item.imageUrl;
   const salePrice   = item.price * (1 - discount / 100);
 
   const handleAdd = (e: React.MouseEvent) => {
@@ -144,7 +144,7 @@ function SpecialCard({ item, discount, index }: { item: MenuItem; discount: numb
     >
       {/* Image */}
       <div className="relative h-48 overflow-hidden bg-gradient-to-br from-amber-900 to-amber-700">
-        {isExternal && (
+        {hasImage && (
           <Image
             src={item.imageUrl}
             alt={item.name}

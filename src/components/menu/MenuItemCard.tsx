@@ -34,7 +34,7 @@ const CATEGORY_BG: Record<string, string> = {
 
 export default function MenuItemCard({ item, view = "grid", onViewDetails }: Props) {
   const { addItem } = useCart();
-  const isExternal  = item.imageUrl.startsWith("http");
+  const hasImage = !!item.imageUrl;
 
   const handleAdd = (e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -66,7 +66,7 @@ export default function MenuItemCard({ item, view = "grid", onViewDetails }: Pro
             CATEGORY_BG[item.category] ?? "from-gray-800 to-gray-600"
           }`}
         >
-          {isExternal ? (
+          {hasImage ? (
             <Image
               src={item.imageUrl}
               alt={item.name}
@@ -143,7 +143,7 @@ export default function MenuItemCard({ item, view = "grid", onViewDetails }: Pro
           CATEGORY_BG[item.category] ?? "from-gray-800 to-gray-600"
         }`}
       >
-        {isExternal ? (
+        {hasImage ? (
           <Image
             src={item.imageUrl}
             alt={item.name}

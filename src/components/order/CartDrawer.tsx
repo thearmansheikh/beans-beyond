@@ -177,7 +177,7 @@ export default function CartDrawer({ open, onClose }: Props) {
               {/* Cart items */}
               <ul className="space-y-1">
                 {items.map((item) => {
-                  const isExternal = item.imageUrl?.startsWith("http");
+                  const isExternal = !!item.imageUrl;
                   return (
                     <li
                       key={item.menuItemId}
